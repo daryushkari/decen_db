@@ -1,0 +1,20 @@
+this is list of localdb commands available:
+
+localdb init "foldername"
+    set the folder which all databases are stored in local system
+    example:
+        localdb init /home/user/DecenDB
+
+localdb new "database name"
+    creates a new database if database already exists returns error 
+    example:
+        local new mydatabase
+
+localdb drop "database name"
+    delete database return error if database already deosn't exists
+    example:
+        localdb drop mydatabase
+
+localdb show dbs
+    show list of databases
+
