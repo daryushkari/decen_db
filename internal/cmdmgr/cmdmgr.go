@@ -10,7 +10,7 @@ import (
 func CommandManager(){
 
 	commandList := utilities.ReturnFileLines("config/commands/main_commands.cnf")
-	inputCommands = commandParser()
+	inputCommands := commandParser()
 	
 	// check if user hasn't entered any command
 	if len(os.Args) < 2{
@@ -27,8 +27,8 @@ func CommandManager(){
 	switch(os.Args[1]){
 	case "help":
 		HelpCmd(inputCommands)
-	// case "localdb":
-
+	case "localdb":
+		LocaldbManage(inputCommands)
 	}
 }
 
