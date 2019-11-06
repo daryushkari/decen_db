@@ -8,23 +8,26 @@ import (
 
 // InitDataFolder sets folder which all databse files and logs are stored
 func InitDataFolder(folderName string){
-
-	databaseInitPath := "config/database_init.cnf"
-
-	file, fileError := os.Create(databaseInitPath)
-	utilities.PanicError(fileError)
-	defer file.Close()
-	file.WriteString(folderName+"\n")
 	
-	if _, err := os.Stat(folderName+"/data_config"); os.IsNotExist(err){
+	if _, err := os.Stat(folderName+"/data_config"); os.IsNotExist(err) || err == nil{
 		makeDirErr := os.MkdirAll(folderName+"/data_config", 0700)
 		utilities.PanicError(makeDirErr)
-		makeDataConfig(folderName)
-	}else if err == nil{
+
+		makeLedgerFolderErr := os.MkdirAll(folderName+"/ledger_database", 0700)
+		utilities.PanicError(makeLedgerFolderErr)
+
+		makeLoclaFolderErr := os.MkdirAll(folderName+"/local_database", 0700)
+		utilities.PanicError(makeLoclaFolderErr)
+		
 		makeDataConfig(folderName)
 	}else{
 		utilities.PanicError(err)
 	}
+
+	databaseInitPath := "config/database_init.cnf"
+	databasePathes := []string{folderName, folderName + "/ledger_database", folderName + "/local_database"}
+
+	makeAndWriteFile(databaseInitPath, databasePathes, true)
 
 }
 
@@ -37,7 +40,7 @@ func makeDataConfig(foldeName string){
 	localDataListLines := []string{"use database:", "", "list of local databases:", ""}
 	ledgerDataListLines := []string{"use database:", "", "list of ledger databases:", ""}
 	
-	makeAndWriteFile(localDatabaseListCnf, localDataListLines)
-	makeAndWriteFile(ledgerDatabaseListCnf, ledgerDataListLines)
+	makeAndWriteFile(localDatabaseListCnf, localDataListLines, false)
+	makeAndWriteFile(ledgerDatabaseListCnf, ledgerDataListLines, false)
 }
 

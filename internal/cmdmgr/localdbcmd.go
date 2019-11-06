@@ -7,7 +7,7 @@ import (
 )
 
 
-// LocaldbManage manages all commands starting with localdb
+// LocaldbManage manages all commands starting with localdb and checks user input and calls related functions
 func LocaldbManage(inputCommands []string){
 	fmt.Println(inputCommands[1])
 	switch(inputCommands[2]){
@@ -18,5 +18,7 @@ func LocaldbManage(inputCommands []string){
 		}
 		fmt.Println(inputCommands[3])
 		filemgr.InitDataFolder(inputCommands[3])
+	case "new":
+		
 	}
 }
