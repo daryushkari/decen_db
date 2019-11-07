@@ -1,8 +1,8 @@
 package cmdmgr
 
 import (
-	"fmt"
 	"../utilities"
+	"fmt"
 )
 
 // HelpCmd shows help

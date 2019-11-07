@@ -1,8 +1,8 @@
 package utilities
 
 import (
-	"os"
 	"bufio"
+	"os"
 )
 
 // CheckStringInSlice checks if string s is in given array
@@ -16,21 +16,33 @@ func CheckStringInSlice(s string, arr []string) bool{
 }
 
 // PanicError if there is any kind of error panic
-func PanicError(e error){
-	if e != nil{
-		panic(e)
+func PanicError(err error){
+	if err != nil{
+		panic(err)
 	}
 }
 
 // ReturnFileLines gets fileLocation as argument and returns file line by line as a string slice
-func ReturnFileLines(fileLocation string)(commandList []string){
-	file, e := os.Open(fileLocation)
-	PanicError(e)
+func ReturnFileLines(fileLocation string)(linesList []string){
+	file, err := os.Open(fileLocation)
+	PanicError(err)
 	defer file.Close()
 
 	fileLine := bufio.NewScanner(file)
 	for fileLine.Scan(){
-		commandList = append(commandList, fileLine.Text())
+		linesList = append(linesList, fileLine.Text())
 	}
-	return commandList
+	return linesList
+}
+
+func AppendFile(lines []string, filePath string){
+	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0700)
+	PanicError(err)
+	defer f.Close()
+	for _, i := range lines{
+		if _, err := f.WriteString(i + "\n"); err != nil {
+			PanicError(err)
+		}
+	}
+
 }

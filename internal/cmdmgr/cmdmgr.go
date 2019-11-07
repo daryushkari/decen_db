@@ -1,9 +1,9 @@
 package cmdmgr
 
 import (
+	"../utilities"
 	"fmt"
 	"os"
-	"../utilities"
 )
 
 // CommandManager Main command manager
@@ -20,11 +20,11 @@ func CommandManager(){
 
 	// check if user hasn't entered valid command
 	if !utilities.CheckStringInSlice(os.Args[1],commandList){
-		fmt.Println("error: ",inputCommands[1],"is an invlid command please enter help command for more information")
+		fmt.Println("error: ",inputCommands[1],"is an invalid command please enter help command for more information")
 		return
 	}
 
-	switch(os.Args[1]){
+	switch os.Args[1] {
 	case "help":
 		HelpCmd(inputCommands)
 	case "localdb":

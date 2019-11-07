@@ -15,6 +15,6 @@ localdb drop "database name"
     example:
         localdb drop mydatabase
 
-localdb show dbs
+localdb show
     show list of databases
 
