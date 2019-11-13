@@ -32,19 +32,6 @@ func InitDataFolder(folderName string) {
 
 }
 
-// makeDataConfig makes data config files which is needed for managing all databases
-func makeDataConfig(folderName string) {
-
-	localDatabaseListCnf := folderName + "/data_config/local_database_list.cnf"
-	ledgerDatabaseListCnf := folderName + "/data_config/ledger_database_list.cnf"
-
-	localDataListLines := []string{"use database:", "", "list of local databases:", ""}
-	ledgerDataListLines := []string{"use database:", "", "list of ledger databases:", ""}
-
-	makeAndWriteFile(localDatabaseListCnf, localDataListLines, false)
-	makeAndWriteFile(ledgerDatabaseListCnf, ledgerDataListLines, false)
-}
-
 // MakeNewDatabase creates a database with name 
 func MakeNewDatabase(databaseType string, databaseName string) {
 	databasePathFolder := returnDatabaseFolder(databaseType) + "/" + databaseName
@@ -69,22 +56,10 @@ func MakeNewDatabase(databaseType string, databaseName string) {
 
 	databaseConfigPath := databasePathFolder + "/config" + "database_config.cnf"
 	databaseConfigLines := []string{"database_path_folder : " + databasePathFolder,
-		"database_log_path"
+		"database_log_path" ,
 		"database_data_path : " + databasePathFolder+"/data",
 		"collection_path_folder : " + databasePathFolder+"/data/collection",
 		}
 	makeAndWriteFile(databaseConfigPath, databaseConfigLines, false)
 }
 
-func checkDatabaseExist(databaseName string, databaseFolder string) bool {
-	allDataFolder := returnDatabaseFolder("all")
-	allLedgerDatabase := utilities.ReturnFileLines(allDataFolder + "/ledger_database_list.cnf")
-	allLocalDatabase := utilities.ReturnFileLines(allDataFolder + "/local_database_list.cnf")
-
-	if _, err := os.Stat(databaseFolder); os.IsNotExist(err) {
-		if !utilities.CheckStringInSlice(databaseName, append(allLedgerDatabase, allLocalDatabase...)) {
-			return false
-		}
-	}
-	return true
-}

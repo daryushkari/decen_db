@@ -50,3 +50,29 @@ func returnDatabaseFolder(databaseType string)string{
 	}
 	panic("config file is corrupted please run command: \n localdb init folder name to fix it")
 }
+
+// makeDataConfig makes data config files which is needed for managing all databases
+func makeDataConfig(folderName string) {
+
+	localDatabaseListCnf := folderName + "/data_config/local_database_list.cnf"
+	ledgerDatabaseListCnf := folderName + "/data_config/ledger_database_list.cnf"
+
+	localDataListLines := []string{"use database:", "", "list of local databases:", ""}
+	ledgerDataListLines := []string{"use database:", "", "list of ledger databases:", ""}
+
+	makeAndWriteFile(localDatabaseListCnf, localDataListLines, false)
+	makeAndWriteFile(ledgerDatabaseListCnf, ledgerDataListLines, false)
+}
+
+func checkDatabaseExist(databaseName string, databaseFolder string) bool {
+	allDataFolder := returnDatabaseFolder("all")
+	allLedgerDatabase := utilities.ReturnFileLines(allDataFolder + "/ledger_database_list.cnf")
+	allLocalDatabase := utilities.ReturnFileLines(allDataFolder + "/local_database_list.cnf")
+
+	if _, err := os.Stat(databaseFolder); os.IsNotExist(err) {
+		if !utilities.CheckStringInSlice(databaseName, append(allLedgerDatabase, allLocalDatabase...)) {
+			return false
+		}
+	}
+	return true
+}
