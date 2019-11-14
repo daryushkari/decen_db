@@ -74,9 +74,21 @@ func MakeDatabase(dBaseType string, dBaseName string) {
 
 // Show list of databases
 func ShowDatabase(){
-	fmt.Println("list of local databases:")
-	//locCnf := returnDataBaseDir("all") + "/data_config" + "local_database_list"
-	//dbaseLines := utilities.ReturnFileLines("")
+
+	dBaseTypes := map[string]string{"local":"loc_cnf", "ledger": "leg_cnf"}
+
+	for k, v := range dBaseTypes{
+		fmt.Println("list of " + k + " databases:")
+		locCnf := returnDataBaseDir(v)
+		dBaseLines := utilities.ReturnFileLines(locCnf)
+
+		for i, s :=  range dBaseLines{
+			if i > 3 && s != ""{
+				fmt.Println(s)
+			}
+		}
+	}
+
 }
 
 
