@@ -25,8 +25,12 @@ func InitDataDir(dirName string) {
 	utilities.PanicError(locErr)
 
 	dBaseInitPath := "config/database_init.cnf"
-	dBasePathList := []string{"all : " + dirName, "ledgerdb : " + dirName +
-		"/ledger_database", "localdb : " + dirName + "/local_database"}
+	dBasePathList := []string{"all : " + dirName,
+		                      "ledgerdb : " + dirName + "/ledger_database",
+		                      "localdb : " + dirName + "/local_database",
+		                      "cnf : " + dirName + "/data_config",
+							  "loc_cnf : " + dirName + "/data_config/local_database_list.cnf",
+		                      "leg_cnf : " + dirName + "/data_config/ledger_database_list.cnf"}
 	makeAndWriteFile(dBaseInitPath, dBasePathList, true)
 
 	makeDataConfig(dirName)
@@ -67,3 +71,15 @@ func MakeDatabase(dBaseType string, dBaseName string) {
 	addDatabaseNameToList(dBaseType, dBaseName)
 }
 
+
+// Show list of databases
+func ShowDatabase(){
+	fmt.Println("list of local databases:")
+	//locCnf := returnDataBaseDir("all") + "/data_config" + "local_database_list"
+	//dbaseLines := utilities.ReturnFileLines("")
+}
+
+
+func DropDatabase(){
+
+}

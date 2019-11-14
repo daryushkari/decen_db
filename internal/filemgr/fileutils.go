@@ -66,9 +66,8 @@ func makeDataConfig(dirName string) {
 }
 
 func checkDataBaseExist(dBaseName string, dBaseDir string) bool {
-	dataPath := returnDataBaseDir("all")
-	legPath := utilities.ReturnFileLines(dataPath + "/data_config/ledger_database_list.cnf")
-	locPath := utilities.ReturnFileLines(dataPath + "/data_config/local_database_list.cnf")
+	legPath := utilities.ReturnFileLines(returnDataBaseDir("loc_cnf"))
+	locPath := utilities.ReturnFileLines(returnDataBaseDir("leg_cnf"))
 
 	if _, err := os.Stat(dBaseDir); os.IsNotExist(err) {
 		if !utilities.CheckStringInSlice(dBaseName, append(legPath, locPath...)) {
@@ -95,14 +94,12 @@ func deleteInDir(dirPath string){
 // adds new database created to config list
 func addDatabaseNameToList(dBaseType string, dBaseName string){
 
-	line := []string{dBaseName}
-
-	allDataCnf := returnDataBaseDir("all") + "/data_config/"
 	if dBaseType == "localdb"{
-		allDataCnf += "local_database_list.cnf"
+		dBaseType = returnDataBaseDir("loc_cnf")
 	}else if dBaseName == "ledgerdb"{
-		allDataCnf += "ledger_database_list.cnf"
+		dBaseType = returnDataBaseDir("leg_cnf")
 	}
 
-	utilities.AppendFile(line, allDataCnf)
+	line := []string{dBaseName}
+	utilities.AppendFile(line, dBaseType)
 }

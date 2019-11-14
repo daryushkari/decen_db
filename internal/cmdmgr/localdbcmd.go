@@ -24,4 +24,5 @@ func LocaldbManage(inputCommands []string){
 		}
 		filemgr.MakeDatabase(inputCommands[1], inputCommands[3])
 	}
+
 }

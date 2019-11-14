@@ -17,4 +17,3 @@ localdb drop "database name"
 
 localdb show
     show list of databases
-
