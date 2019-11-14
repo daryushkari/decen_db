@@ -32,7 +32,7 @@ func InitDataDir(dirName string) {
 	makeDataConfig(dirName)
 }
 
-// MakeDatabase creates a database with name
+// MakeDatabase creates a new database with name
 func MakeDatabase(dBaseType string, dBaseName string) {
 	dBasePathDir := returnDataBaseDir(dBaseType) + "/" + dBaseName
 

@@ -4,8 +4,8 @@ import (
 	"../utilities"
 	"bufio"
 	"os"
-	"strings"
 	"path/filepath"
+	"strings"
 )
 
 // each separate line is one element in lines
@@ -67,8 +67,8 @@ func makeDataConfig(dirName string) {
 
 func checkDataBaseExist(dBaseName string, dBaseDir string) bool {
 	dataPath := returnDataBaseDir("all")
-	legPath := utilities.ReturnFileLines(dataPath + "/ledger_database_list.cnf")
-	locPath := utilities.ReturnFileLines(dataPath + "/local_database_list.cnf")
+	legPath := utilities.ReturnFileLines(dataPath + "/data_config/ledger_database_list.cnf")
+	locPath := utilities.ReturnFileLines(dataPath + "/data_config/local_database_list.cnf")
 
 	if _, err := os.Stat(dBaseDir); os.IsNotExist(err) {
 		if !utilities.CheckStringInSlice(dBaseName, append(legPath, locPath...)) {
@@ -78,7 +78,7 @@ func checkDataBaseExist(dBaseName string, dBaseDir string) bool {
 	return true
 }
 
-
+// deleteInDir deletes everything inside directory
 func deleteInDir(dirPath string){
 	dir, err := os.Open(dirPath)
 	utilities.PanicError(err)
