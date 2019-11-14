@@ -8,7 +8,11 @@ import (
 
 // InitDataDir sets folder which all database files and logs are stored
 func InitDataDir(dirName string) {
-	deleteInDir(dirName)
+
+	// check if directory exists delete everything inside folder
+	if _, err := os.Stat(dirName); err == nil {
+		deleteInDir(dirName)
+	}
 
 	err := os.MkdirAll(dirName+"/data_config", 0700)
 	utilities.PanicError(err)
