@@ -23,8 +23,8 @@ func PanicError(err error){
 }
 
 // ReturnFileLines gets fileLocation as argument and returns file line by line as a string slice
-func ReturnFileLines(fileLocation string)(linesList []string){
-	file, err := os.Open(fileLocation)
+func ReturnFileLines(filePath string)(linesList []string){
+	file, err := os.Open(filePath)
 	PanicError(err)
 	defer file.Close()
 

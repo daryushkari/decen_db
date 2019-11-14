@@ -17,16 +17,16 @@ func makeAndWriteFile(filename string, lines []string, overwrite bool){
 
 	// if overwrite is true deletes file and overwrites if file does exist
 	if overwrite {
-		file, fileError := os.Create(filename)
-		utilities.PanicError(fileError)
+		file, err := os.Create(filename)
+		utilities.PanicError(err)
 		_, writeErr := file.WriteString(allLines)
 		utilities.PanicError(writeErr)
 		return
 	}
 
 	if _, err := os.Stat(filename); os.IsNotExist(err){
-		file, fileError := os.Create(filename)
-		utilities.PanicError(fileError)
+		file, err := os.Create(filename)
+		utilities.PanicError(err)
 		defer file.Close()
 		_, writeErr := file.WriteString(allLines)
 		utilities.PanicError(writeErr)
@@ -37,41 +37,41 @@ func makeAndWriteFile(filename string, lines []string, overwrite bool){
 
 
 // return where should database be stored based on it's type if give all type returns parent folder
-func returnDatabaseFolder(databaseType string)string{
+func returnDataBaseDir(dBaseType string) string {
 	file, err := os.Open("config/database_init.cnf")
 	utilities.PanicError(err)
 	defer file.Close()
 
-	lineReader := bufio.NewScanner(file)
-	for lineReader.Scan(){
-		if strings.Contains(lineReader.Text(), databaseType){
-			databasePath := strings.Fields(lineReader.Text())
-			return databasePath[len(databasePath)-1]
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan(){
+		if strings.Contains(scanner.Text(), dBaseType){
+			dBasePath := strings.Fields(scanner.Text())
+			return dBasePath[len(dBasePath)-1]
 		}
 	}
 	panic("config file is corrupted please run command: \n localdb init folder name to fix it")
 }
 
 // makeDataConfig makes data config files which is needed for managing all databases
-func makeDataConfig(folderName string) {
+func makeDataConfig(dirName string) {
 
-	localDatabaseListCnf := folderName + "/data_config/local_database_list.cnf"
-	ledgerDatabaseListCnf := folderName + "/data_config/ledger_database_list.cnf"
+	locCnf := dirName + "/data_config/local_database_list.cnf"
+	legCnf := dirName + "/data_config/ledger_database_list.cnf"
 
-	localDataListLines := []string{"use database:", "", "list of local databases:", ""}
-	ledgerDataListLines := []string{"use database:", "", "list of ledger databases:", ""}
+	locLines := []string{"use database:", "", "list of local databases:", ""}
+	legLines := []string{"use database:", "", "list of ledger databases:", ""}
 
-	makeAndWriteFile(localDatabaseListCnf, localDataListLines, false)
-	makeAndWriteFile(ledgerDatabaseListCnf, ledgerDataListLines, false)
+	makeAndWriteFile(locCnf, locLines, false)
+	makeAndWriteFile(legCnf, legLines, false)
 }
 
-func checkDatabaseExist(databaseName string, databaseFolder string) bool {
-	allDataFolder := returnDatabaseFolder("all")
-	allLedgerDatabase := utilities.ReturnFileLines(allDataFolder + "/ledger_database_list.cnf")
-	allLocalDatabase := utilities.ReturnFileLines(allDataFolder + "/local_database_list.cnf")
+func checkDataBaseExist(dBaseName string, dBaseDir string) bool {
+	dataPath := returnDataBaseDir("all")
+	legPath := utilities.ReturnFileLines(dataPath + "/ledger_database_list.cnf")
+	locPath := utilities.ReturnFileLines(dataPath + "/local_database_list.cnf")
 
-	if _, err := os.Stat(databaseFolder); os.IsNotExist(err) {
-		if !utilities.CheckStringInSlice(databaseName, append(allLedgerDatabase, allLocalDatabase...)) {
+	if _, err := os.Stat(dBaseDir); os.IsNotExist(err) {
+		if !utilities.CheckStringInSlice(dBaseName, append(legPath, locPath...)) {
 			return false
 		}
 	}

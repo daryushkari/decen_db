@@ -6,56 +6,56 @@ import (
 	"os"
 )
 
-// InitDataFolder sets folder which all database files and logs are stored
-func InitDataFolder(folderName string) {
-	deleteInDir(folderName)
+// InitDataDir sets folder which all database files and logs are stored
+func InitDataDir(dirName string) {
+	deleteInDir(dirName)
 
-	makeDirErr := os.MkdirAll(folderName+"/data_config", 0700)
-	utilities.PanicError(makeDirErr)
+	err := os.MkdirAll(dirName+"/data_config", 0700)
+	utilities.PanicError(err)
 
-	makeLedgerFolderErr := os.MkdirAll(folderName+"/ledger_database", 0700)
-	utilities.PanicError(makeLedgerFolderErr)
+	legErr := os.MkdirAll(dirName+"/ledger_database", 0700)
+	utilities.PanicError(legErr)
 
-	makeLocalFolderErr := os.MkdirAll(folderName+"/local_database", 0700)
-	utilities.PanicError(makeLocalFolderErr)
+	locErr := os.MkdirAll(dirName+"/local_database", 0700)
+	utilities.PanicError(locErr)
 
-	databaseInitPath := "config/database_init.cnf"
-	databasePathList := []string{"all : " + folderName, "ledgerdb : " + folderName +
-		"/ledger_database", "localdb : " + folderName + "/local_database"}
+	dBaseInitPath := "config/database_init.cnf"
+	dBasePathList := []string{"all : " + dirName, "ledgerdb : " + dirName +
+		"/ledger_database", "localdb : " + dirName + "/local_database"}
 
-	makeAndWriteFile(databaseInitPath, databasePathList, true)
+	makeAndWriteFile(dBaseInitPath, dBasePathList, true)
 
-	makeDataConfig(folderName)
+	makeDataConfig(dirName)
 }
 
-// MakeNewDatabase creates a database with name 
-func MakeNewDatabase(databaseType string, databaseName string) {
-	databasePathFolder := returnDatabaseFolder(databaseType) + "/" + databaseName
+// MakeDatabase creates a database with name
+func MakeDatabase(dBaseType string, dBaseName string) {
+	dBasePathDir := returnDataBaseDir(dBaseType) + "/" + dBaseName
 
-	if checkDatabaseExist(databaseName, databasePathFolder) {
+	if checkDataBaseExist(dBaseName, dBasePathDir) {
 		fmt.Println("database already exist")
 		return
 	}
 
-	makeDirErr := os.MkdirAll(databasePathFolder+"/data/collection", 0700)
-	utilities.PanicError(makeDirErr)
+	err := os.MkdirAll(dBasePathDir+"/data/collection", 0700)
+	utilities.PanicError(err)
 
-	makeDirErr = os.MkdirAll(databasePathFolder+"/logs", 0700)
-	utilities.PanicError(makeDirErr)
+	err = os.MkdirAll(dBasePathDir+"/logs", 0700)
+	utilities.PanicError(err)
 
-	makeDirErr = os.MkdirAll(databasePathFolder+"/config", 0700)
-	utilities.PanicError(makeDirErr)
+	err = os.MkdirAll(dBasePathDir+"/config", 0700)
+	utilities.PanicError(err)
 
-	collectionListPath := databasePathFolder + "/data" + "collection_list.cnf"
+	collectionListPath := dBasePathDir + "/data" + "collection_list.cnf"
 	collectionList := []string{"list of collections :"}
 	makeAndWriteFile(collectionListPath, collectionList, false)
 
-	databaseConfigPath := databasePathFolder + "/config" + "database_config.cnf"
-	databaseConfigLines := []string{"database_path_folder : " + databasePathFolder,
+	dBaseConfigPath := dBasePathDir + "/config" + "database_config.cnf"
+	dBaseConfigLines := []string{"database_path_folder : " + dBasePathDir,
 		"database_log_path" ,
-		"database_data_path : " + databasePathFolder+"/data",
-		"collection_path_folder : " + databasePathFolder+"/data/collection",
+		"database_data_path : " + dBasePathDir +"/data",
+		"collection_path_folder : " + dBasePathDir +"/data/collection",
 		}
-	makeAndWriteFile(databaseConfigPath, databaseConfigLines, false)
+	makeAndWriteFile(dBaseConfigPath, dBaseConfigLines, false)
 }
 

@@ -10,7 +10,7 @@ import (
 func CommandManager(){
 
 	commandList := utilities.ReturnFileLines("config/commands/main_commands.cnf")
-	inputCommands := commandParser()
+	inputCommands := cmdParser()
 	
 	// check if user hasn't entered any command
 	if len(os.Args) < 2{
@@ -32,9 +32,9 @@ func CommandManager(){
 	}
 }
 
-func commandParser()(inputCommands []string){
+func cmdParser()(inputCmd []string){
 	for _, i := range os.Args{
-		inputCommands = append(inputCommands, i)
+		inputCmd = append(inputCmd, i)
 	}
-	return inputCommands
+	return inputCmd
 }
