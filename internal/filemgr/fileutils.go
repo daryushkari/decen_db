@@ -91,3 +91,18 @@ func deleteInDir(dirPath string){
 		utilities.PanicError(err)
 	}
 }
+
+// adds new database created to config list
+func addDatabaseNameToList(dBaseType string, dBaseName string){
+
+	line := []string{dBaseName}
+
+	allDataCnf := returnDataBaseDir("all") + "/data_config/"
+	if dBaseType == "localdb"{
+		allDataCnf += "local_database_list.cnf"
+	}else if dBaseName == "ledgerdb"{
+		allDataCnf += "ledger_database_list.cnf"
+	}
+
+	utilities.AppendFile(line, allDataCnf)
+}

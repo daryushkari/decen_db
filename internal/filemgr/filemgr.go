@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+
 // InitDataDir sets folder which all database files and logs are stored
 func InitDataDir(dirName string) {
 
@@ -26,16 +27,16 @@ func InitDataDir(dirName string) {
 	dBaseInitPath := "config/database_init.cnf"
 	dBasePathList := []string{"all : " + dirName, "ledgerdb : " + dirName +
 		"/ledger_database", "localdb : " + dirName + "/local_database"}
-
 	makeAndWriteFile(dBaseInitPath, dBasePathList, true)
 
 	makeDataConfig(dirName)
 }
 
+
 // MakeDatabase creates a new database with name
 func MakeDatabase(dBaseType string, dBaseName string) {
-	dBasePathDir := returnDataBaseDir(dBaseType) + "/" + dBaseName
 
+	dBasePathDir := returnDataBaseDir(dBaseType) + "/" + dBaseName
 	if checkDataBaseExist(dBaseName, dBasePathDir) {
 		fmt.Println("database already exist")
 		return
@@ -61,5 +62,8 @@ func MakeDatabase(dBaseType string, dBaseName string) {
 		"collection_path_folder : " + dBasePathDir +"/data/collection",
 		}
 	makeAndWriteFile(dBaseConfigPath, dBaseConfigLines, false)
+
+	// Add database name in existing databases list
+	addDatabaseNameToList(dBaseType, dBaseName)
 }
 
