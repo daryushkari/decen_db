@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"os"
 	"strings"
+	"path/filepath"
 )
 
 // each separate line is one element in lines
@@ -75,4 +76,18 @@ func checkDatabaseExist(databaseName string, databaseFolder string) bool {
 		}
 	}
 	return true
+}
+
+
+func deleteInDir(dirPath string){
+	dir, err := os.Open(dirPath)
+	utilities.PanicError(err)
+	defer dir.Close()
+	
+	names, err := dir.Readdirnames(-1)
+	utilities.PanicError(err)
+	for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dirPath, name))
+		utilities.PanicError(err)
+	}
 }

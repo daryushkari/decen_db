@@ -8,21 +8,16 @@ import (
 
 // InitDataFolder sets folder which all database files and logs are stored
 func InitDataFolder(folderName string) {
+	deleteInDir(folderName)
 
-	if _, err := os.Stat(folderName + "/data_config"); os.IsNotExist(err) || err == nil {
-		makeDirErr := os.MkdirAll(folderName+"/data_config", 0700)
-		utilities.PanicError(makeDirErr)
+	makeDirErr := os.MkdirAll(folderName+"/data_config", 0700)
+	utilities.PanicError(makeDirErr)
 
-		makeLedgerFolderErr := os.MkdirAll(folderName+"/ledger_database", 0700)
-		utilities.PanicError(makeLedgerFolderErr)
+	makeLedgerFolderErr := os.MkdirAll(folderName+"/ledger_database", 0700)
+	utilities.PanicError(makeLedgerFolderErr)
 
-		makeLocalFolderErr := os.MkdirAll(folderName+"/local_database", 0700)
-		utilities.PanicError(makeLocalFolderErr)
-
-		makeDataConfig(folderName)
-	} else {
-		utilities.PanicError(err)
-	}
+	makeLocalFolderErr := os.MkdirAll(folderName+"/local_database", 0700)
+	utilities.PanicError(makeLocalFolderErr)
 
 	databaseInitPath := "config/database_init.cnf"
 	databasePathList := []string{"all : " + folderName, "ledgerdb : " + folderName +
@@ -30,6 +25,7 @@ func InitDataFolder(folderName string) {
 
 	makeAndWriteFile(databaseInitPath, databasePathList, true)
 
+	makeDataConfig(folderName)
 }
 
 // MakeNewDatabase creates a database with name 
