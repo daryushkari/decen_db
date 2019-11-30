@@ -32,6 +32,10 @@ func LocaldbManage(inputCommands []string){
 
 	case "show":
 		showCommand(inputCommands)
+
+	case "drop":
+		filemgr.DropDatabase()
+
 	default:
 		fmt.Println("invalid input please enter help localdb for more information")
 	}
