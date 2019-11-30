@@ -23,6 +23,17 @@ func LocaldbManage(inputCommands []string){
 			return
 		}
 		filemgr.MakeDatabase(inputCommands[1], inputCommands[3])
+
+	case "show":
+		showCommand(inputCommands)
+	default:
+		fmt.Println("invalid input please enter help localdb for more information")
 	}
 
+}
+
+func showCommand(inputCommands []string){
+	if len(inputCommands) < 4{
+		filemgr.ShowDatabase()
+	}
 }
