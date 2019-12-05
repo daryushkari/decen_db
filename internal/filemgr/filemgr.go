@@ -91,7 +91,11 @@ func ShowDatabase(){
 
 }
 
-
+// DropDatabase deletes selected database
 func DropDatabase(){
+
+}
+
+func removeLine(line string, filename string){
 
 }
