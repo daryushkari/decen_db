@@ -61,7 +61,7 @@ func MakeDatabase(dBaseType string, dBaseName string) {
 
 	dBaseConfigPath := dBasePathDir + "/config" + "database_config.cnf"
 	dBaseConfigLines := []string{"database_path_folder : " + dBasePathDir,
-		"database_log_path" ,
+		"database_log_path : " + dBasePathDir + "/logs",
 		"database_data_path : " + dBasePathDir +"/data",
 		"collection_path_folder : " + dBasePathDir +"/data/collection",
 		}
