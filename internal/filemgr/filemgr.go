@@ -4,6 +4,7 @@ import (
 	"../utilities"
 	"fmt"
 	"os"
+	"../loadcnf"
 )
 
 
@@ -75,17 +76,14 @@ func MakeDatabase(dBaseType string, dBaseName string) {
 // Show list of databases
 func ShowDatabase(){
 
-	dBaseTypes := map[string]string{"local":"loc_cnf", "ledger": "leg_cnf"}
+	allDataCnf := loadcnf.LoadDatabaseConfig(true)
+
+	dBaseTypes := map[string][]string{"local":allDataCnf.LocalDBList, "ledger": allDataCnf.LedgerDBList}
 
 	for k, v := range dBaseTypes{
 		fmt.Println("list of " + k + " databases:")
-		locCnf := returnDataBaseDir(v)
-		dBaseLines := utilities.ReturnFileLines(locCnf)
-
-		for i, s :=  range dBaseLines{
-			if i > 3 && s != ""{
-				fmt.Println(s)
-			}
+		for _, i := range v{
+			fmt.Println(i)
 		}
 	}
 

@@ -10,18 +10,18 @@ import(
 // including directory path which all databases are and directory of ledger databases
 // and local databases and their config file path
 type allDatabaseConfig struct {
-	databaseInitPath string
-	allDatabaseInfo map[string]string
-	ledgerUseDB string
-	localUseDB string
-	localDBList []string
-	ledgerDBList []string
-	eachDBCnf map[string]string
- 	// if directory for storing is has not been defined yet hasCnf is false
-	hasCnf bool
+	DatabaseInitPath string
+	AllDatabaseInfo  map[string]string
+	LedgerUseDB      string
+	LocalUseDB       string
+	LocalDBList      []string
+	LedgerDBList     []string
+	EachDBCnf        map[string]string
+ 	// if directory for storing is has not been defined yet HasCnf is false
+	HasCnf bool
 }
 
-var AllDataCnf *allDatabaseConfig
+var allDataCnf = new(allDatabaseConfig)
 var lineTypePlace = 0
 var linePathPlace = 2
 var minCnfLines = 1
@@ -29,37 +29,37 @@ var minCnfLines = 1
 // LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
 // if refresh is True reload data
 func LoadDatabaseConfig(refresh bool) *allDatabaseConfig {
-	if AllDataCnf != nil && !refresh{
-		return AllDataCnf
+	if allDataCnf != nil && !refresh{
+		return allDataCnf
 	}
 	setConstantConfigs()
-	cnfLines := utilities.ReturnFileLines(AllDataCnf.databaseInitPath)
-	AllDataCnf.allDatabaseInfo = make(map[string]string)
+	cnfLines := utilities.ReturnFileLines(allDataCnf.DatabaseInitPath)
+	allDataCnf.AllDatabaseInfo = make(map[string]string)
 
 	if len(cnfLines) < minCnfLines {
-		AllDataCnf.hasCnf = false
+		allDataCnf.HasCnf = false
 	}else{
 		for _, i := range cnfLines{
 			lineType := strings.Fields(i)[lineTypePlace]
 			linePath := strings.Fields(i)[linePathPlace]
-			AllDataCnf.allDatabaseInfo[lineType] = linePath
+			allDataCnf.AllDatabaseInfo[lineType] = linePath
 		}
-		AllDataCnf.localUseDB, AllDataCnf.localDBList = returnDBLists(AllDataCnf.allDatabaseInfo["loc_cnf"])
-		AllDataCnf.ledgerUseDB, AllDataCnf.ledgerDBList = returnDBLists(AllDataCnf.allDatabaseInfo["leg_cnf"])
+		allDataCnf.LocalUseDB, allDataCnf.LocalDBList = returnDBLists(allDataCnf.AllDatabaseInfo["loc_cnf"])
+		allDataCnf.LedgerUseDB, allDataCnf.LedgerDBList = returnDBLists(allDataCnf.AllDatabaseInfo["leg_cnf"])
 	}
 
-	return AllDataCnf
+	return allDataCnf
 }
 
 func setConstantConfigs(){
-	AllDataCnf.eachDBCnf = make(map[string]string)
-	AllDataCnf.databaseInitPath = "/config/database_init.cnf"
-	AllDataCnf.eachDBCnf["configDir"] = "/config"
-	AllDataCnf.eachDBCnf["dataDir"] = "/data"
-	AllDataCnf.eachDBCnf["collectionDir"] = "/data/collection"
-	AllDataCnf.eachDBCnf["logDir"] = "/logs"
-	AllDataCnf.eachDBCnf["ConfigDatabaseFile"] = "/configdatabase_config.cnf"
-	AllDataCnf.eachDBCnf["collectionListFile"] = "/datacollection_list.cnf"
+	allDataCnf.EachDBCnf = make(map[string]string)
+	allDataCnf.DatabaseInitPath = "config/database_init.cnf"
+	allDataCnf.EachDBCnf["configDir"] = "/config"
+	allDataCnf.EachDBCnf["dataDir"] = "/data"
+	allDataCnf.EachDBCnf["collectionDir"] = "/data/collection"
+	allDataCnf.EachDBCnf["logDir"] = "/logs"
+	allDataCnf.EachDBCnf["ConfigDatabaseFile"] = "/configdatabase_config.cnf"
+	allDataCnf.EachDBCnf["collectionListFile"] = "/datacollection_list.cnf"
 }
 
 func returnDBLists(DBPath string)(useDB string, DBLists []string){
