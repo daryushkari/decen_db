@@ -16,21 +16,17 @@ type allDataConfig struct {
 	DataDir string `json:"DataDir"`
 	LedgerDataDir string `json:"LedgerDataDir"`
 	LocalDataDir string `json:"LocalDataDir"`
-	AllDatabaseInfo  map[string]string
-	LedgerUseDB      string
-	LocalUseDB       string
-	LocalDBList      []string
-	LedgerDBList     []string
-	EachDBCnf        map[string]string
+	LedgerDbConfig string `json:"LedgerDatabaseConfig"`
+	LocalDbConfig string `json:"LocalDatabaseConfig"`
+	LocalDbList []string `json:"LocalDatabaseNameList"`
+	LedgerDbList []string `json:"LocalDatabaseNameList"`
  	// if directory for storing is has not been defined yet HasCnf is false
 	HasCnf bool
 }
 
+
 var allDataCnf = new(allDatabaseConfig)
 var once sync.Once
-var lineTypePlace = 0
-var linePathPlace = 2
-var minCnfLines = 1
 
 // LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
 // if refresh is True reload data
