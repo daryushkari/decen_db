@@ -3,9 +3,12 @@ package filemgr
 import (
 	"../utilities"
 	"bufio"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
+	"bytes"
+	"io/ioutil"
 )
 
 // each separate line is one element in lines
@@ -102,4 +105,58 @@ func addDatabaseNameToList(dBaseType string, dBaseName string){
 
 	line := []string{dBaseName}
 	utilities.AppendFile(line, dBaseType)
+}
+
+// delete lines start to end
+func deleteLines(fName string, start int, end int){
+
+}
+
+
+
+func removeLines(fName string, start, n int) {
+	var file *os.File
+	file, _ = os.OpenFile(fName, os.O_RDWR, 0700)
+
+	defer file.Close()
+
+	var fileBytes []byte
+	if b, err = ioutil.ReadAll(f); err != nil {
+		return
+	}
+	cut, ok := skip(b, start-1)
+	if !ok {
+		return fmt.Errorf("less than %d lines", start)
+	}
+	if n == 0 {
+		return nil
+	}
+	tail, ok := skip(cut, n)
+	if !ok {
+		return fmt.Errorf("less than %d lines after line %d", n, start)
+	}
+	t := int64(len(b) - len(cut))
+	if err = f.Truncate(t); err != nil {
+		return
+	}
+	if len(tail) > 0 {
+		_, err = f.WriteAt(tail, t)
+	}
+	return
+}
+
+func skip(b []byte, n int) ([]byte, bool) {
+	for ; n > 0; n-- {
+		if len(b) == 0 {
+			return nil, false
+		}
+		x := bytes.IndexByte(b, '\n')
+		if x < 0 {
+			x = len(b)
+		} else {
+			x++
+		}
+		b = b[x:]
+	}
+	return b, true
 }

@@ -1,10 +1,10 @@
 package filemgr
 
 import (
+	"../loadcnf"
 	"../utilities"
 	"fmt"
 	"os"
-	"../loadcnf"
 )
 
 
@@ -90,10 +90,19 @@ func ShowDatabase(){
 }
 
 // DropDatabase deletes selected database
-func DropDatabase(){
+func DropDatabase(dbType string, dbName string){
+
+	allDataCnf := loadcnf.LoadDatabaseConfig(true)
+
+	dbTypesList := map[string][]string{"localdb":allDataCnf.LocalDBList, "ledgerdb": allDataCnf.LedgerDBList}
+	dbCnfFile := map[string]string{"localdb": "loc_cnf", "ledgerdb": "leg_cnf"}
+
+	if !utilities.CheckStringInSlice(dbName, dbTypesList[dbType]){
+		panic("no such database named" + dbName)
+	}
+
+	deleteInDir(allDataCnf.AllDatabaseInfo[dbType] + "/" + dbName)
+	deleteInDir(allDataCnf.AllDatabaseInfo[dbCnfFile[dbType]])
 
 }
 
-func removeLine(line string, filename string){
-
-}

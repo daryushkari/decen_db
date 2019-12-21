@@ -3,14 +3,19 @@ package loadcnf
 import(
 	"../utilities"
 	"strings"
+	"encoding/json"
+	"io/ioutil"
+	"sync"
 )
 
 
 // allDatabaseConfig includes database_init file and config information in it
 // including directory path which all databases are and directory of ledger databases
 // and local databases and their config file path
-type allDatabaseConfig struct {
-	DatabaseInitPath string
+type allDataConfig struct {
+	DataDir string `json:"DataDir"`
+	LedgerDataDir string `json:"LedgerDataDir"`
+	LocalDataDir string `json:"LocalDataDir"`
 	AllDatabaseInfo  map[string]string
 	LedgerUseDB      string
 	LocalUseDB       string
@@ -22,13 +27,17 @@ type allDatabaseConfig struct {
 }
 
 var allDataCnf = new(allDatabaseConfig)
+var once sync.Once
 var lineTypePlace = 0
 var linePathPlace = 2
 var minCnfLines = 1
 
 // LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
 // if refresh is True reload data
-func LoadDatabaseConfig(refresh bool) *allDatabaseConfig {
+func LoadDatabaseConfig() *allDatabaseConfig {
+	once.Do{
+
+	}
 	if allDataCnf != nil && !refresh{
 		return allDataCnf
 	}
