@@ -2,10 +2,13 @@ package loadcnf
 
 import(
 	"../utilities"
+	"os"
 	"strings"
 	"encoding/json"
 	"io/ioutil"
 	"sync"
+	"time"
+
 )
 
 
@@ -22,38 +25,28 @@ type allDataConfig struct {
 	LedgerDbList []string `json:"LocalDatabaseNameList"`
  	// if directory for storing is has not been defined yet HasCnf is false
 	HasCnf bool
+	LastRead time.Time
+	LastModify time.Time
 }
 
 
 var allDataCnf = new(allDatabaseConfig)
-var once sync.Once
+var once, onceReload *sync.Once
 
 // LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
 // if refresh is True reload data
 func LoadDatabaseConfig() *allDatabaseConfig {
+	info, err := os.Stat(DataBaseInitCNF)
+
+	if(sync.Tr)
 	once.Do{
 
 	}
-	if allDataCnf != nil && !refresh{
-		return allDataCnf
-	}
-	setConstantConfigs()
-	cnfLines := utilities.ReturnFileLines(allDataCnf.DatabaseInitPath)
-	allDataCnf.AllDatabaseInfo = make(map[string]string)
 
-	if len(cnfLines) < minCnfLines {
-		allDataCnf.HasCnf = false
-	}else{
-		for _, i := range cnfLines{
-			lineType := strings.Fields(i)[lineTypePlace]
-			linePath := strings.Fields(i)[linePathPlace]
-			allDataCnf.AllDatabaseInfo[lineType] = linePath
-		}
-		allDataCnf.LocalUseDB, allDataCnf.LocalDBList = returnDBLists(allDataCnf.AllDatabaseInfo["loc_cnf"])
-		allDataCnf.LedgerUseDB, allDataCnf.LedgerDBList = returnDBLists(allDataCnf.AllDatabaseInfo["leg_cnf"])
-	}
+}
 
-	return allDataCnf
+func timeReload(){
+
 }
 
 func setConstantConfigs(){
