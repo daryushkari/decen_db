@@ -27,48 +27,10 @@ type allDataConfig struct {
 }
 
 
-var allDataCnf = new(allDataConfig)
-var mu sync.Mutex
-
-// InitAllDataConfig gets directory path which all databases should be stored in and
-// saves in /config/database_init.cnf file as json the information it saves includes
-// directory path where all data are stored
-// directory path where all data of ledger databases are stored
-// directory path where all data of local databases are stored
-// path of local databases config file and ledger databases config file
-func InitAllDataConfig(allDataDir string) *allDataConfig{
-	mu.Lock()
-	defer mu.Unlock()
-	setAllDataConfig(allDataDir)
-
-	file, err := json.MarshalIndent(allDataCnf, "", " ")
-	utilities.PanicError(err)
-	err = ioutil.WriteFile(DataBaseInitCnfName, file, 0700)
-	utilities.PanicError(err)
-
-	allDataCnf.LastRead = time.Now()
-	return allDataCnf
-}
-
-func setAllDataConfig(allDataDir string){
-
-	allDataCnf.DataDir = allDataDir
-	allDataCnf.DataCnfDir = allDataDir + DataCnfDirNAme
-	allDataCnf.LedgerDataDir = allDataDir + LedgerDirName
-	allDataCnf.LocalDataDir = allDataDir + LocalDirName
-	allDataCnf.LedgerDbCnf = allDataDir + LedgerDbCnfPath
-	allDataCnf.LocalDbCnf = allDataDir + LocalDbCnfPath
-	allDataCnf.LocalDbList = []string{}
-	allDataCnf.LedgerDbList = []string{}
-	allDataCnf.HasCnf = true
-
-}
-
-
 var once, onceReload *sync.Once
 
 // LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
-if refresh is True reload data
+//if refresh is True reload data
 func LoadDatabaseConfig() *allDatabaseConfig {
 	info, err := os.Stat(DataBaseInitCNF)
 
