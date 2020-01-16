@@ -27,41 +27,41 @@ func InitDataDir(dirName string) {
 	loadcnf.InitAllDataConfig(dirName)
 }
 
-//
-//
-//// MakeDatabase creates a new database with name
-//func MakeDatabase(dBaseType string, dBaseName string) {
-//
-//	dBasePathDir := returnDataBaseDir(dBaseType) + "/" + dBaseName
-//	if checkDataBaseExist(dBaseName, dBasePathDir) {
-//		fmt.Println("database already exist")
-//		return
-//	}
-//
-//	err := os.MkdirAll(dBasePathDir+"/data/collection", 0700)
-//	utilities.PanicError(err)
-//
-//	err = os.MkdirAll(dBasePathDir+"/logs", 0700)
-//	utilities.PanicError(err)
-//
-//	err = os.MkdirAll(dBasePathDir+"/config", 0700)
-//	utilities.PanicError(err)
-//
-//	collectionListPath := dBasePathDir + "/data" + "collection_list.cnf"
-//	collectionList := []string{"list of collections :"}
-//	makeAndWriteFile(collectionListPath, collectionList, false)
-//
-//	dBaseConfigPath := dBasePathDir + "/config" + "database_config.cnf"
-//	dBaseConfigLines := []string{"database_path_folder : " + dBasePathDir,
-//		"database_log_path : " + dBasePathDir + "/logs",
-//		"database_data_path : " + dBasePathDir +"/data",
-//		"collection_path_folder : " + dBasePathDir +"/data/collection",
-//		}
-//	makeAndWriteFile(dBaseConfigPath, dBaseConfigLines, false)
-//
-//	// Add database name in existing databases list
-//	addDatabaseNameToList(dBaseType, dBaseName)
-//}
+
+
+// MakeDatabase creates a new database with name
+func MakeDatabase(dBaseType string, dBaseName string) {
+
+	dBasePathDir := returnDataBaseDir(dBaseType) + "/" + dBaseName
+	if checkDataBaseExist(dBaseName, dBasePathDir) {
+		fmt.Println("database already exist")
+		return
+	}
+
+	err := os.MkdirAll(dBasePathDir+"/data/collection", 0700)
+	utilities.PanicError(err)
+
+	err = os.MkdirAll(dBasePathDir+"/logs", 0700)
+	utilities.PanicError(err)
+
+	err = os.MkdirAll(dBasePathDir+"/config", 0700)
+	utilities.PanicError(err)
+
+	collectionListPath := dBasePathDir + "/data" + "collection_list.cnf"
+	collectionList := []string{"list of collections :"}
+	makeAndWriteFile(collectionListPath, collectionList, false)
+
+	dBaseConfigPath := dBasePathDir + "/config" + "database_config.cnf"
+	dBaseConfigLines := []string{"database_path_folder : " + dBasePathDir,
+		"database_log_path : " + dBasePathDir + "/logs",
+		"database_data_path : " + dBasePathDir +"/data",
+		"collection_path_folder : " + dBasePathDir +"/data/collection",
+		}
+	makeAndWriteFile(dBaseConfigPath, dBaseConfigLines, false)
+
+	// Add database name in existing databases list
+	addDatabaseNameToList(dBaseType, dBaseName)
+}
 //
 //
 //// Show list of databases
