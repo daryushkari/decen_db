@@ -45,17 +45,3 @@ func timeReload(){
 	info, err := os.Stat(DataBaseInitCNF)
 	if err == nil &&
 }
-
-func returnDBLists(DBPath string)(useDB string, DBLists []string){
-	DBLines := utilities.ReturnFileLines(DBPath)
-	useDatabasePlace := 1
-	DataBaseListPlace := 3
-
-	useDB = DBLines[useDatabasePlace]
-	for _, i := range DBLines[DataBaseListPlace:]{
-		if i != ""{
-			DBLists = append(DBLists, i)
-		}
-	}
-	return useDB, DBLists
-}
