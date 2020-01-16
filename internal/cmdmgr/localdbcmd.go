@@ -23,12 +23,12 @@ func LocaldbManage(inputCommands []string){
 		}
 		filemgr.InitDataDir(inputCommands[3])
 
-	//case "new":
-	//	if len(inputCommands) < 4{
-	//		fmt.Println("please enter database name for creating new database")
-	//		return
-	//	}
-	//	filemgr.MakeDatabase(inputCommands[1], inputCommands[3])
+	case "new":
+		if len(inputCommands) < 4{
+			fmt.Println("please enter database name for creating new database")
+			return
+		}
+		filemgr.MakeDatabase(inputCommands[1], inputCommands[3])
 
 	//case "show":
 	//	showCommand(inputCommands)

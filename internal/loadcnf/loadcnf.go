@@ -20,7 +20,7 @@ type allDataConfig struct {
 	LedgerDbCnf string `json:"LedgerDatabaseConfig"`
 	LocalDbCnf string `json:"LocalDatabaseConfig"`
 	LocalDbList []string `json:"LocalDatabaseNameList"`
-	LedgerDbList []string `json:"LocalDatabaseNameList"`
+	LedgerDbList []string `json:"LedgerDatabaseNameList"`
  	// if directory for storing is has not been defined yet HasCnf is false
 	HasCnf bool `json:"-"`
 	LastRead time.Time `json:"-"`
@@ -65,46 +65,35 @@ func setAllDataConfig(allDataDir string){
 }
 
 
-//var once, onceReload *sync.Once
+var once, onceReload *sync.Once
 
 // LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
-// if refresh is True reload data
-//func LoadDatabaseConfig() *allDatabaseConfig {
-//	info, err := os.Stat(DataBaseInitCNF)
-//
-//	if(sync.Tr)
-//	once.Do{
-//
-//	}
-//
-//}
+if refresh is True reload data
+func LoadDatabaseConfig() *allDatabaseConfig {
+	info, err := os.Stat(DataBaseInitCNF)
 
-//func timeReload(){
-//	info, err := os.Stat(DataBaseInitCNF)
-//	if err == nil &&
-//}
-//
-//func setConstantConfigs(){
-//	allDataCnf.EachDBCnf = make(map[string]string)
-//	allDataCnf.DatabaseInitPath = "config/database_init.cnf"
-//	allDataCnf.EachDBCnf["configDir"] = "/config"
-//	allDataCnf.EachDBCnf["dataDir"] = "/data"
-//	allDataCnf.EachDBCnf["collectionDir"] = "/data/collection"
-//	allDataCnf.EachDBCnf["logDir"] = "/logs"
-//	allDataCnf.EachDBCnf["ConfigDatabaseFile"] = "/configdatabase_config.cnf"
-//	allDataCnf.EachDBCnf["collectionListFile"] = "/datacollection_list.cnf"
-//}
-//
-//func returnDBLists(DBPath string)(useDB string, DBLists []string){
-//	DBLines := utilities.ReturnFileLines(DBPath)
-//	useDatabasePlace := 1
-//	DataBaseListPlace := 3
-//
-//	useDB = DBLines[useDatabasePlace]
-//	for _, i := range DBLines[DataBaseListPlace:]{
-//		if i != ""{
-//			DBLists = append(DBLists, i)
-//		}
-//	}
-//	return useDB, DBLists
-//}
+	if(sync.Tr)
+	once.Do{
+
+	}
+
+}
+
+func timeReload(){
+	info, err := os.Stat(DataBaseInitCNF)
+	if err == nil &&
+}
+
+func returnDBLists(DBPath string)(useDB string, DBLists []string){
+	DBLines := utilities.ReturnFileLines(DBPath)
+	useDatabasePlace := 1
+	DataBaseListPlace := 3
+
+	useDB = DBLines[useDatabasePlace]
+	for _, i := range DBLines[DataBaseListPlace:]{
+		if i != ""{
+			DBLists = append(DBLists, i)
+		}
+	}
+	return useDB, DBLists
+}
