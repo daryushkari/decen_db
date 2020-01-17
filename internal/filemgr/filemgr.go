@@ -15,10 +15,7 @@ func InitDataDir(dirName string) {
 		deleteInDir(dirName)
 	}
 
-	err := os.MkdirAll(dirName+loadcnf.DataCnfDirNAme, 0700)
-	utilities.PanicError(err)
-
-	err = os.MkdirAll(dirName+loadcnf.LedgerDirName, 0700)
+	err := os.MkdirAll(dirName+loadcnf.LedgerDirName, 0700)
 	utilities.PanicError(err)
 
 	err = os.MkdirAll(dirName+loadcnf.LocalDirName, 0700)
@@ -32,11 +29,9 @@ func InitDataDir(dirName string) {
 // MakeDatabase creates a new database with name
 func MakeDatabase(dBaseType string, dBaseName string) {
 
-	dBasePathDir := returnDataBaseDir(dBaseType) + "/" + dBaseName
-	if checkDataBaseExist(dBaseName, dBasePathDir) {
-		fmt.Println("database already exist")
-		return
-	}
+	databasePath := loadcnf.LoadDataConfig()
+
+
 
 	err := os.MkdirAll(dBasePathDir+"/data/collection", 0700)
 	utilities.PanicError(err)
