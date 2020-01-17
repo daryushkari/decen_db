@@ -1,6 +1,6 @@
 package loadcnf
 
-//DataBaseInitCnfPath is relative path of database_init.cnf which 
+//DataInitCnfPath is relative path of database_init.cnf which 
 //includes path of all databases directory
 const DataInitCnfPath string = "config/database_init.cnf"
 
