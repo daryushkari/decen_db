@@ -2,14 +2,15 @@ package loadcnf
 
 import (
 	"time"
-	"sync"
 	"encoding/json"
 	"io/ioutil"
+	"sync"
+	"os"
 	"../utilities"
 )
 
 
-// allDatabaseConfig includes database_init file and config information in it
+// allDatabaseConfig includes database_init.cnf file and config information in it
 // including directory path which all databases are and directory of ledger databases
 // and local databases and their config file path
 type allDataConfig struct {
@@ -19,8 +20,6 @@ type allDataConfig struct {
 	DataCnfDir string `json:"DataConfigDir"`
 	LedgerDbCnf string `json:"LedgerDatabaseConfig"`
 	LocalDbCnf string `json:"LocalDatabaseConfig"`
-	LocalDbList []string `json:"LocalDatabaseNameList"`
-	LedgerDbList []string `json:"LedgerDatabaseNameList"`
  	// if directory for storing is has not been defined yet HasCnf is false
 	HasCnf bool `json:"-"`
 	LastRead time.Time `json:"-"`
@@ -29,19 +28,38 @@ type allDataConfig struct {
 
 var once, onceReload *sync.Once
 
-// LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
-//if refresh is True reload data
-func LoadDatabaseConfig() *allDatabaseConfig {
-	info, err := os.Stat(DataBaseInitCNF)
+//LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
+func LoadDatabaseConfig() *allDataConfig {
 
-	if(sync.Tr)
-	once.Do{
+	onceReload.Do(func() {
+		if timeReload(){
+			refreshOnce(once)
+		}
+	})
+	
+	defer refreshOnce(onceReload)
 
+	once.Do(func() {
+			file, _ := ioutil.ReadFile(DataBaseInitCnfPath)
+			_ = json.Unmarshal([]byte(file), allDataCnf)
+			allDataCnf.LastRead = time.Now()
+	})
+
+	return allDataCnf
+}
+
+func refreshOnce(refOnce *sync.Once){
+	refOnce = new(sync.Once)
+}
+
+func timeReload()bool{
+	info, err := os.Stat(DataBaseInitCnfPath)
+	utilities.PanicError(err)
+	lastMod := info.ModTime()
+	timeDiff := lastMod.Sub(allDataCnf.LastRead)
+	if timeDiff > 0{
+		return true
 	}
-
+	return false
 }
-
-func timeReload(){
-	info, err := os.Stat(DataBaseInitCNF)
-	if err == nil &&
-}
+	

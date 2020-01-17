@@ -1,7 +1,7 @@
 package cmdmgr
 
 import (
-	"../filemgr"
+	"filemgr"
 	"fmt"
 )
 
