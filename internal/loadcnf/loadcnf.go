@@ -10,10 +10,10 @@ import (
 )
 
 
-// allDatabaseConfig includes database_init.cnf file and config information in it
-// including directory path which all databases are and directory of ledger databases
-// and local databases and their config file path
-type allDataConfig struct {
+//AllDataConfig includes database_init.cnf file and config information in it
+//including directory path which all databases are and directory of ledger databases
+//and local databases and their config file path
+type AllDataConfig struct {
 	DataDir string `json:"DataDir"`
 	LedgerDataDir string `json:"LedgerDataDir"`
 	LocalDataDir string `json:"LocalDataDir"`
@@ -29,7 +29,7 @@ type allDataConfig struct {
 var once, onceReload *sync.Once
 
 //LoadDatabaseConfig reads information from ./config/database_init.cnf and returns allDatabaseConfig struct
-func LoadDatabaseConfig() *allDataConfig {
+func LoadDatabaseConfig() *AllDataConfig {
 
 	onceReload.Do(func() {
 		if timeReload(){
