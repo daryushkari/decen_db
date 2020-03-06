@@ -4,6 +4,7 @@ import (
 	"../loadcnf"
 	"../utilities"
 	"os"
+	"fmt"
 )
 
 
@@ -27,9 +28,12 @@ func InitDataDir(dirName string) {
 
 
 // MakeDatabase creates a new database with name
-func MakeDatabase(dBaseType string, dBaseName string) {
+func MakeDatabase(dBaseType string, dBaseName string) error{
 
 	databasePath := loadcnf.LoadDataConfig()
+	if databasePath == nil{
+		return fmt.Errorf("database_init.cnf file corrupted please run localdb init to fix")
+	}
 
 
 
@@ -56,6 +60,7 @@ func MakeDatabase(dBaseType string, dBaseName string) {
 
 	// Add database name in existing databases list
 	addDatabaseNameToList(dBaseType, dBaseName)
+	return nil
 }
 //
 //
