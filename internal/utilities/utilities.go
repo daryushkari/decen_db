@@ -16,26 +16,35 @@ func CheckStringInSlice(s string, arr []string) bool{
 }
 
 // ReturnFileLines gets fileLocation as argument and returns file line by line as a string slice
-func ReturnFileLines(filePath string)(linesList []string){
+func ReturnFileLines(filePath string)(linesList []string,err error){
 	file, err := os.Open(filePath)
-	PanicError(err)
 	defer file.Close()
 
 	fileLine := bufio.NewScanner(file)
 	for fileLine.Scan(){
 		linesList = append(linesList, fileLine.Text())
 	}
-	return linesList
+	return linesList, err
 }
 
-func AppendFile(lines []string, filePath string){
+
+//AppendFile sddf 
+func AppendFile(lines []string, filePath string) error {
 	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0700)
-	PanicError(err)
+
+	if err != nil{
+		return err
+	}
+
 	defer f.Close()
 	for _, i := range lines{
 		if _, err := f.WriteString(i + "\n"); err != nil {
-			PanicError(err)
+			if err != nil{
+				return err
+			}
 		}
 	}
+
+	return nil
 
 }
