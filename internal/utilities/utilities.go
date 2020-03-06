@@ -15,13 +15,6 @@ func CheckStringInSlice(s string, arr []string) bool{
 	return false
 }
 
-// PanicError if there is any kind of error panic
-func PanicError(err error){
-	if err != nil{
-		panic(err)
-	}
-}
-
 // ReturnFileLines gets fileLocation as argument and returns file line by line as a string slice
 func ReturnFileLines(filePath string)(linesList []string){
 	file, err := os.Open(filePath)
