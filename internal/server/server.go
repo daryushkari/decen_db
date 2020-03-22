@@ -1,8 +1,10 @@
 package server
 
 import (
+	"decen_db/internal/cmdmgr"
 	"fmt"
 	"net"
+	"strings"
 	"time"
 )
 
@@ -22,25 +24,28 @@ func ListenServer() {
 func handleRequest(conn net.Conn) {
 	defer conn.Close()
 	buf := make([]byte, 4096)
-	timeoutDuration := 5 * time.Second
-	fmt.Println("rec")
+	timeoutDuration := 7 * time.Second
 	err := conn.SetReadDeadline(time.Now().Add(timeoutDuration))
 	if err != nil {
-		fmt.Println("something wrong")
+		fmt.Println(err)
 		return
 	}
 
-	readConn, err := conn.Read(buf)
+	_, err = conn.Read(buf)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(readConn)
+	// input command list for database
+	cmd := strings.Split(string(buf), " ")
+	response := cmdmgr.CommandManager(cmd)
 
-	netst := string(buf)
-	fmt.Println(netst)
+	_, err = conn.Write([]byte(response))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	conn.Write([]byte("Message received."))
 
 }
