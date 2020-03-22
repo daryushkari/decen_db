@@ -1,46 +1,46 @@
 package server
 
 import (
-    "fmt"
+	"fmt"
 	"net"
-	"../utilities"
+	"time"
 )
 
-
-//ListenServer is 
+//ListenServer is main function which listens to new connections for getting commands
 func ListenServer() {
-    listen, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
-    utilities.PanicError(err)
-
+	listen, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
+	PanicError(err)
 	defer listen.Close()
-
+	fmt.Println("listening!")
 	for {
-
 		conn, err := listen.Accept()
-        if err != nil {
-            panic(err)
-        }
-
+		PanicError(err)
 		go handleRequest(conn)
-    }
+	}
 }
 
-// Handles incoming requests.
 func handleRequest(conn net.Conn) {
-  // Make a buffer to hold incoming data.
-  buf := make([]byte, 32)
-  // Read the incoming connection into the buffer.
-  readconn, err := conn.Read(buf)
-  if err != nil {
-    fmt.Println("Error reading:", err.Error())
-  }
-  fmt.Println(readconn)
-  
-  netst := string(buf)
-  fmt.Println(netst)
+	defer conn.Close()
+	buf := make([]byte, 4096)
+	timeoutDuration := 5 * time.Second
+	fmt.Println("rec")
+	err := conn.SetReadDeadline(time.Now().Add(timeoutDuration))
+	if err != nil {
+		fmt.Println("something wrong")
+		return
+	}
 
-  // Send a response back to person contacting us.
-  conn.Write([]byte("Message received."))
-  // Close the connection when you're done with it.
-  conn.Close()
+	readConn, err := conn.Read(buf)
+	if err != nil {
+		panic(err)
+		return
+	}
+
+	fmt.Println(readConn)
+
+	netst := string(buf)
+	fmt.Println(netst)
+
+	conn.Write([]byte("Message received."))
+
 }

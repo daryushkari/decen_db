@@ -28,7 +28,7 @@ func ReturnFileLines(filePath string)(linesList []string,err error){
 }
 
 
-//AppendFile sddf 
+//AppendFile gets lines as array of strings and appends to file given 
 func AppendFile(lines []string, filePath string) error {
 	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0700)
 

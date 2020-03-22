@@ -5,7 +5,6 @@ import(
 	"sync"
 	"encoding/json"
 	"io/ioutil"
-	"../utilities"
 )
 
 var allDataCnf  = new(AllDataConfig)
@@ -22,10 +21,9 @@ func InitAllDataConfig(allDataDir string) *AllDataConfig{
 	defer mu.Unlock()
 	setAllDataConfig(allDataDir)
 
-	file, err := json.MarshalIndent(allDataCnf, "", " ")
-	utilities.PanicError(err)
-	err = ioutil.WriteFile(DataInitCnfPath, file, 0700)
-	utilities.PanicError(err)
+	file, _ := json.MarshalIndent(allDataCnf, "", " ")
+	_ = ioutil.WriteFile(DataInitCnfPath, file, 0700)
+
 
 	allDataCnf.LastRead = time.Now()
 	return allDataCnf

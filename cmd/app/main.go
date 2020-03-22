@@ -1,7 +1,10 @@
 package main
 
-import "../../internal/cmdmgr"
+import (
+	"decen_db/internal/server"
+)
+
 
 func main(){
-	cmdmgr.CommandManager()
+	server.ListenServer()
 }

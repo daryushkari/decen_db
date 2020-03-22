@@ -6,8 +6,6 @@ import (
 	"os"
 	"sync"
 	"time"
-
-	"../utilities"
 )
 
 //AllDataConfig includes database_init.cnf file and config information in it
@@ -48,7 +46,6 @@ func refreshOnce(refOnce *sync.Once) {
 
 func readDataConfig() {
 	file, err := ioutil.ReadFile(DataInitCnfPath)
-	utilities.PanicError(err)
 	err = json.Unmarshal([]byte(file), allDataCnf)
 
 	allDataCnf.LastRead = time.Now()
@@ -60,8 +57,7 @@ func readDataConfig() {
 }
 
 func timeReload() bool {
-	info, err := os.Stat(DataInitCnfPath)
-	utilities.PanicError(err)
+	info, _ := os.Stat(DataInitCnfPath)
 	lastMod := info.ModTime()
 	timeDiff := lastMod.Sub(allDataCnf.LastRead)
 	if timeDiff > 0 {
