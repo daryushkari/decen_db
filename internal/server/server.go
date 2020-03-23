@@ -41,12 +41,10 @@ func handleRequest(conn net.Conn) {
 	cmd := strings.Split(string(buf), " ")
 	response := cmdmgr.CommandManager(cmd)
 
-	for i := 0; i < len(response); i++ {
-		_, err = conn.Write([]byte(response[i]))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+	_, err = conn.Write([]byte(response))
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 }
