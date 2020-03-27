@@ -16,16 +16,17 @@ func CommandManager(cmd []string) string {
 
 	// check if user hasn't entered valid command
 	if !utilities.CheckStringInSlice(cmd[mainCmdIndex], commandList) {
-		return "error: " + cmd[mainCmdIndex] + " is an invalid command please enter help command for more information"
+
 	}
 
 	switch cmd[mainCmdIndex] {
-	case "help":
-		response := HelpCommand(cmd)
-		return response
+		case "help":
+			response := HelpCommand(cmd)
+			return response
 		//case "localdb":
-		//	LocaldbManage(cmd)
+			//LocaldbManage(cmd)
+		default:
+			return "error: " + cmd[mainCmdIndex] + " is an invalid command please enter help command for more information"
 	}
-	return " "
 
 }
