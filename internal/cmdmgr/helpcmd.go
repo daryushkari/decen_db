@@ -22,13 +22,14 @@ func HelpCommand(cmd []string) string {
 	for _, i := range helpList {
 		answer += i + "\n"
 	}
+
 	return answer
 
 }
 
 func returnCommandFileName(cmd []string) string {
 	// command Index which user wants to get help about it
-	wantedCmdIndex := 2
+	wantedCmdIndex := 1
 
 	if len(cmd) < 2 {
 		return helpFileName["main"]

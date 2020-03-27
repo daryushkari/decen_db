@@ -31,14 +31,14 @@ func handleRequest(conn net.Conn) {
 		return
 	}
 
-	_, err = conn.Read(buf)
+	req, err := conn.Read(buf)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// input command list for database
-	cmd := strings.Split(string(buf), " ")
+	cmd := strings.Split(string(buf)[:req], " ")
 	response := cmdmgr.CommandManager(cmd)
 
 	_, err = conn.Write([]byte(response))
