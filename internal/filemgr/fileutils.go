@@ -1,10 +1,32 @@
 package filemgr
 
 import (
+	"decen_db/internal/utilities"
 	"os"
 	"path/filepath"
-	"../utilities"
 )
+
+// deleteInDir deletes everything inside directory
+func DeleteInDir(dirPath string)(err error){
+	dir, err := os.Open(dirPath)
+	if err != nil{
+		return err
+	}
+	defer utilities.CloseFile(dir, &err)
+
+	names, err := dir.Readdirnames(-1)
+	if err != nil{
+		return err
+	}
+
+	for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dirPath, name))
+		if err != nil{
+			return err
+		}
+	}
+	return err
+}
 
 
 //
@@ -76,21 +98,6 @@ import (
 //	}
 //	return true
 //}
-
-
-// deleteInDir deletes everything inside directory
-func deleteInDir(dirPath string){
-	dir, err := os.Open(dirPath)
-	utilities.PanicError(err)
-	defer dir.Close()
-
-	names, err := dir.Readdirnames(-1)
-	utilities.PanicError(err)
-	for _, name := range names {
-		err = os.RemoveAll(filepath.Join(dirPath, name))
-		utilities.PanicError(err)
-	}
-}
 
 
 //// adds new database created to config list

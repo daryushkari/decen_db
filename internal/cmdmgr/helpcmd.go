@@ -28,16 +28,16 @@ func HelpCommand(cmd []string) string {
 }
 
 func returnCommandFileName(cmd []string) string {
-	// command Index which user wants to get help about it
-	wantedCmdIndex := 1
 
-	if len(cmd) < 2 {
+	subCmdIndex := 1
+
+	if len(cmd) <= subCmdIndex {
 		return helpFileName["main"]
 	}
 
-	if helpFileName[cmd[wantedCmdIndex]] == "" {
+	if helpFileName[cmd[subCmdIndex]] == "" {
 		return helpFileName["main"]
 	}
 
-	return helpFileName[cmd[wantedCmdIndex]]
+	return helpFileName[cmd[subCmdIndex]]
 }

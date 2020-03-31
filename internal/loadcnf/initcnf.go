@@ -1,10 +1,10 @@
 package loadcnf
 
-import(
-	"time"
-	"sync"
+import (
 	"encoding/json"
 	"io/ioutil"
+	"sync"
+	"time"
 )
 
 var allDataCnf  = new(AllDataConfig)
