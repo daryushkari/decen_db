@@ -38,7 +38,10 @@ func setDataPath(dirName string) string{
 		return err.Error()
 	}
 
-	loadcnf.InitAllDataConfig(dirName)
+	_, err = loadcnf.InitAllDataConfig(dirName)
+	if err != nil{
+		return err.Error()
+	}
 
 	return "Success"
 }

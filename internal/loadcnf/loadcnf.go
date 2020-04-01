@@ -8,25 +8,11 @@ import (
 	"time"
 )
 
-//AllDataConfig includes database_init.cnf file and config information in it
-//including directory path which all databases are and directory of ledger databases
-//and local databases and their config file path
-type AllDataConfig struct {
-	DataDir       string `json:"DataDir"`
-	LedgerDataDir string `json:"LedgerDataDir"`
-	LocalDataDir  string `json:"LocalDataDir"`
-	LedgerDbCnf   string `json:"LedgerDatabaseConfig"`
-	LocalDbCnf    string `json:"LocalDatabaseConfig"`
-	// if directory for storing is has not been defined yet HasCnf is false
-	HasCnf   bool      `json:"-"`
-	LastRead time.Time `json:"-"`
-}
-
 var once, onceReload *sync.Once
 
-//LoadDataConfig reads information from ./config/database_init.cnf and returns allDataConfig struct
-func LoadDataConfig() *AllDataConfig {
 
+//LoadDataConfig reads information from ./config/database_init.cnf and returns AllDataConfig struct
+func LoadDataConfig() *AllDataConfig {
 	onceReload.Do(func() {
 		if timeReload() {
 			refreshOnce(once)
@@ -34,10 +20,9 @@ func LoadDataConfig() *AllDataConfig {
 	})
 
 	defer refreshOnce(onceReload)
-
 	once.Do(readDataConfig)
 
-	return allDataCnf
+	return AllDataCnf
 }
 
 func refreshOnce(refOnce *sync.Once) {
@@ -46,20 +31,20 @@ func refreshOnce(refOnce *sync.Once) {
 
 func readDataConfig() {
 	file, err := ioutil.ReadFile(DataInitCnfPath)
-	err = json.Unmarshal([]byte(file), allDataCnf)
+	err = json.Unmarshal([]byte(file), AllDataCnf)
 
-	allDataCnf.LastRead = time.Now()
-	allDataCnf.HasCnf = true
+	AllDataCnf.LastRead = time.Now()
+	AllDataCnf.HasCnf = true
 
 	if err != nil {
-		allDataCnf = nil
+		AllDataCnf = nil
 	}
 }
 
 func timeReload() bool {
 	info, _ := os.Stat(DataInitCnfPath)
 	lastMod := info.ModTime()
-	timeDiff := lastMod.Sub(allDataCnf.LastRead)
+	timeDiff := lastMod.Sub(AllDataCnf.LastRead)
 	if timeDiff > 0 {
 		return true
 	}

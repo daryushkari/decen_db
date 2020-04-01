@@ -2,6 +2,8 @@ package filemgr
 
 import (
 	"decen_db/internal/utilities"
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -28,6 +30,15 @@ func DeleteInDir(dirPath string)(err error){
 	return err
 }
 
+
+func WriteAsJson(content interface{}, path string)error{
+	file, err := json.MarshalIndent(content, "", " ")
+	if err != nil{
+		return err
+	}
+	err = ioutil.WriteFile(path, file, 0700)
+	return err
+}
 
 //
 //// each separate line is one element in lines
