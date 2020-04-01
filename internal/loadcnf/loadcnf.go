@@ -2,27 +2,29 @@ package loadcnf
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"sync"
 	"time"
 )
 
-var once, onceReload *sync.Once
+var once, onceReload sync.Once
 
 
 //LoadDataConfig reads information from ./config/database_init.cnf and returns AllDataConfig struct
-func LoadDataConfig() *AllDataConfig {
+func LoadDataConfig() (*AllDataConfig ,error){
+
 	onceReload.Do(func() {
 		if timeReload() {
-			refreshOnce(once)
+			refreshOnce(&once)
 		}
 	})
 
-	defer refreshOnce(onceReload)
+	defer refreshOnce(&onceReload)
 	once.Do(readDataConfig)
 
-	return AllDataCnf
+	return AllDataCnf, nil
 }
 
 func refreshOnce(refOnce *sync.Once) {
@@ -37,6 +39,7 @@ func readDataConfig() {
 	AllDataCnf.HasCnf = true
 
 	if err != nil {
+		fmt.Println(err)
 		AllDataCnf = nil
 	}
 }

@@ -43,5 +43,10 @@ func setDataPath(dirName string) string{
 		return err.Error()
 	}
 
+	_, err = loadcnf.InitLocalDbConfig()
+	if err != nil{
+		return err.Error()
+	}
+
 	return "Success"
 }

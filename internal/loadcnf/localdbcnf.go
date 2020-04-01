@@ -1,6 +1,7 @@
 package loadcnf
 
 import (
+	"decen_db/internal/filemgr"
 	"sync"
 	"time"
 )
@@ -28,7 +29,14 @@ func InitLocalDbConfig() (localDbConfig *localDbConfig,err error) {
 	defer LocalDbCnfMu.Unlock()
 	setLocalDbConfig()
 
-	//dataCnf := LoadDataConfig()
+	dataCnf, err := LoadDataConfig()
+	if err != nil{
+		return nil,err
+	}
+	err = filemgr.WriteAsJson(LocalDbCnf, dataCnf.LocalDbCnf)
+	if err != nil{
+		return nil, err
+	}
 
 	LocalDbCnf.LastRead = time.Now()
 	return LocalDbCnf, nil

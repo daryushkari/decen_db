@@ -34,7 +34,7 @@ func InitAllDataConfig(allDataDir string) (allDataConfig *AllDataConfig, err err
 	defer allDataCnfMu.Unlock()
 	setAllDataConfig(allDataDir)
 
-	err = filemgr.WriteAsJson(allDataDir, DataInitCnfPath)
+	err = filemgr.WriteAsJson(AllDataCnf, DataInitCnfPath)
 	if err != nil{
 		return nil, err
 	}
