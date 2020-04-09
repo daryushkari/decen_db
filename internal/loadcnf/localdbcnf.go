@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-//AllDataConfig includes database_init.cnf file and config information in it
+//allDataConfig includes database_init.cnf file and config information in it
 //including directory path which all databases are and directory of ledger databases
 //and local databases and their config file path
 type localDbConfig struct {
@@ -17,10 +17,21 @@ type localDbConfig struct {
 	LastRead time.Time `json:"-"`
 }
 
+func (localCnf *localDbConfig) updateLastRead(){
+	localCnf.HasCnf = true
+	localCnf.LastRead = time.Now()
+}
 
 var LocalDbCnf  = new(localDbConfig)
 var LocalDbCnfMu sync.Mutex
 
+
+//LoadLocalDbConfig reads localdb config from file and loads to localDbConfig struct with singleton pattern
+func LoadLocalDbConfig() (err error, locCnf *localDbConfig){
+	err, allCnf := LoadAllDataConfig()
+	err = loadConfigOnce(cnfMap["localDb"],allCnf.LocalDbCnf, AllDataCnf.LastRead)
+	return err, LocalDbCnf
+}
 
 // InitLocalDbConfig gets directory path which all databases should be stored in and
 // saves in /config/database_init.cnf file as json
@@ -29,10 +40,10 @@ func InitLocalDbConfig() (localDbConfig *localDbConfig,err error) {
 	defer LocalDbCnfMu.Unlock()
 	setLocalDbConfig()
 
-	dataCnf, err := LoadDataConfig()
-	if err != nil{
-		return nil,err
-	}
+	//dataCnf, err := loadConfigOnce()
+	//if err != nil{
+	//	return nil,err
+	//}
 	err = filemgr.WriteAsJson(LocalDbCnf, dataCnf.LocalDbCnf)
 	if err != nil{
 		return nil, err

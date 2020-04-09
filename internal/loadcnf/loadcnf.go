@@ -2,54 +2,76 @@ package loadcnf
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"sync"
 	"time"
 )
 
-var once, onceReload sync.Once
+type configLoad interface {
+	updateLastRead()
+}
+
+type onceConfig struct{
+	cnfLoad configLoad
+	once *sync.Once
+	onceReload *sync.Once
+}
+
+var(
+	cnfMap = map[string]onceConfig{
+		"allData": {cnfLoad:AllDataCnf},
+		"localDb": {cnfLoad:LocalDbCnf}}
+)
 
 
-//LoadDataConfig reads information from ./config/database_init.cnf and returns AllDataConfig struct
-func LoadDataConfig() (*AllDataConfig ,error){
+func loadConfigOnce(onceCnf onceConfig, filePath string, lastRead time.Time) (err error){
 
-	onceReload.Do(func() {
-		if timeReload() {
-			refreshOnce(&once)
+	onceCnf.onceReload.Do(func() {
+		var needReload bool
+		needReload, err = needTimeReload(filePath, lastRead)
+		if needReload{
+			refreshOnce(onceCnf.once)
 		}
 	})
+	if err != nil{
+		return err
+	}
 
-	defer refreshOnce(&onceReload)
-	once.Do(readDataConfig)
+	defer refreshOnce(onceCnf.onceReload)
+	onceCnf.once.Do(func() {
+		err = readDBaseConfig(filePath, onceCnf.cnfLoad)
+	})
 
-	return AllDataCnf, nil
+	return err
+}
+
+
+func readDBaseConfig(filePath string, cLoad configLoad) (err error){
+	file, err := ioutil.ReadFile(filePath)
+	if err != nil{
+		return err
+	}
+	err = json.Unmarshal([]byte(file), cLoad)
+
+	cLoad.updateLastRead()
+	return err
 }
 
 func refreshOnce(refOnce *sync.Once) {
 	refOnce = new(sync.Once)
 }
 
-func readDataConfig() {
-	file, err := ioutil.ReadFile(DataInitCnfPath)
-	err = json.Unmarshal([]byte(file), AllDataCnf)
-
-	AllDataCnf.LastRead = time.Now()
-	AllDataCnf.HasCnf = true
-
-	if err != nil {
-		fmt.Println(err)
-		AllDataCnf = nil
+func needTimeReload(filePath string, lastRead time.Time) (needReload bool,err error) {
+	info, err := os.Stat(filePath)
+	if err != nil{
+		return false, err
 	}
-}
 
-func timeReload() bool {
-	info, _ := os.Stat(DataInitCnfPath)
 	lastMod := info.ModTime()
-	timeDiff := lastMod.Sub(AllDataCnf.LastRead)
+	timeDiff := lastMod.Sub(lastRead)
 	if timeDiff > 0 {
-		return true
+		return true, nil
 	}
-	return false
+	return false, nil
 }

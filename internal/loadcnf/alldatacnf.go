@@ -8,10 +8,10 @@ import (
 )
 
 
-//AllDataConfig includes database_init.cnf file and config information in it
+//allDataConfig includes database_init.cnf file and config information in it
 //including directory path which all databases are and directory of ledger databases
 //and local databases and their config file path
-type AllDataConfig struct {
+type allDataConfig struct {
 	DataDir       string `json:"DataDir"`
 	LedgerDataDir string `json:"LedgerDataDir"`
 	LocalDataDir  string `json:"LocalDataDir"`
@@ -22,14 +22,25 @@ type AllDataConfig struct {
 	LastRead time.Time `json:"-"`
 }
 
+func (localCnf *allDataConfig) updateLastRead(){
+	localCnf.HasCnf = true
+	localCnf.LastRead = time.Now()
+}
 
-var AllDataCnf = new(AllDataConfig)
+var AllDataCnf = new(allDataConfig)
 var allDataCnfMu sync.Mutex
+
+// LoadAllDataConfig reads all of data config from database_init.cnf file
+//and loads to allDataConfig with singleton pattern
+func LoadAllDataConfig() (err error,allCnf *allDataConfig){
+	err = loadConfigOnce(cnfMap["allData"],DataInitCnfPath, AllDataCnf.LastRead)
+	return err, AllDataCnf
+}
 
 
 // InitAllDataConfig gets directory path which all databases should be stored in and
 // saves in /config/database_init.cnf file as json
-func InitAllDataConfig(allDataDir string) (allDataConfig *AllDataConfig, err error) {
+func InitAllDataConfig(allDataDir string) (allDataConfig *allDataConfig, err error) {
 	allDataCnfMu.Lock()
 	defer allDataCnfMu.Unlock()
 	setAllDataConfig(allDataDir)

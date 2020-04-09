@@ -23,7 +23,7 @@ func ReturnFileLines(filePath string) (linesList []string, err error) {
 		return nil, err
 	}
 
-	defer file.Close()
+	defer CloseFile(file, &err)
 
 	fileLine := bufio.NewScanner(file)
 	for fileLine.Scan() {
@@ -33,19 +33,18 @@ func ReturnFileLines(filePath string) (linesList []string, err error) {
 }
 
 //AppendFile gets lines as array of strings and appends to file given
-func AppendFile(lines []string, filePath string) error {
+func AppendFile(lines []string, filePath string) (err error) {
 	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0700)
 
 	if err != nil {
 		return err
 	}
 
-	defer f.Close()
+	defer CloseFile(f, &err)
+
 	for _, i := range lines {
 		if _, err := f.WriteString(i + "\n"); err != nil {
-			if err != nil {
-				return err
-			}
+			return err
 		}
 	}
 
