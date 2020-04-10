@@ -1,7 +1,7 @@
 package cmdmgr
 
 import(
-	"decen_db/internal/localdbmgr"
+	"decen_db/internal/dbasemgr"
 )
 
 // CommandManager Main command manager
@@ -14,7 +14,7 @@ func CommandManager(cmd []string) string {
 			response := HelpCommand(cmd)
 			return response
 		case "localdb":
-			response := localdbmgr.LocaldbManage(cmd)
+			response := dbasemgr.LocalDbManage(cmd)
 			return response
 		default:
 			return "error: " + cmd[mainCmdIndex] + " is an invalid command please enter help command for more information"

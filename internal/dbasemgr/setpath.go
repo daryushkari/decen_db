@@ -1,4 +1,4 @@
-package localdbmgr
+package dbasemgr
 
 import (
 	"decen_db/internal/filemgr"
