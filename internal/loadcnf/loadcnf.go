@@ -20,8 +20,8 @@ type onceConfig struct{
 
 var(
 	cnfMap = map[string]onceConfig{
-		"allData": {cnfLoad:AllDataCnf},
-		"localDb": {cnfLoad:LocalDbCnf}}
+		"allData": {cnfLoad:AllDataCnf, once: &sync.Once{}, onceReload: &sync.Once{}},
+		"localDb": {cnfLoad:LocalDbCnf, once: &sync.Once{}, onceReload: &sync.Once{}}}
 )
 
 

@@ -32,9 +32,9 @@ var allDataCnfMu sync.Mutex
 
 // LoadAllDataConfig reads all of data config from database_init.cnf file
 //and loads to allDataConfig with singleton pattern
-func LoadAllDataConfig() (err error,allCnf *allDataConfig){
+func LoadAllDataConfig() (allCnf *allDataConfig,err error){
 	err = loadConfigOnce(cnfMap["allData"],DataInitCnfPath, AllDataCnf.LastRead)
-	return err, AllDataCnf
+	return AllDataCnf, err
 }
 
 

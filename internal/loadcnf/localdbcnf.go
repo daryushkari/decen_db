@@ -27,10 +27,13 @@ var LocalDbCnfMu sync.Mutex
 
 
 //LoadLocalDbConfig reads localdb config from file and loads to localDbConfig struct with singleton pattern
-func LoadLocalDbConfig() (err error, locCnf *localDbConfig){
-	err, allCnf := LoadAllDataConfig()
+func LoadLocalDbConfig() (locCnf *localDbConfig, err error){
+	allCnf, err := LoadAllDataConfig()
+	if err != nil{
+		return nil, err
+	}
 	err = loadConfigOnce(cnfMap["localDb"],allCnf.LocalDbCnf, AllDataCnf.LastRead)
-	return err, LocalDbCnf
+	return LocalDbCnf, err
 }
 
 // InitLocalDbConfig gets directory path which all databases should be stored in and
@@ -40,10 +43,10 @@ func InitLocalDbConfig() (localDbConfig *localDbConfig,err error) {
 	defer LocalDbCnfMu.Unlock()
 	setLocalDbConfig()
 
-	//dataCnf, err := loadConfigOnce()
-	//if err != nil{
-	//	return nil,err
-	//}
+	dataCnf, err := LoadAllDataConfig()
+	if err != nil{
+		return nil,err
+	}
 	err = filemgr.WriteAsJson(LocalDbCnf, dataCnf.LocalDbCnf)
 	if err != nil{
 		return nil, err
