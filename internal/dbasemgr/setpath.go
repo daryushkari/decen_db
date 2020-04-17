@@ -7,7 +7,7 @@ import (
 )
 
 
-func setPathManage(cmd []string) string{
+func setPathManage(cmd []string) (msg string){
 	dirNameIndex := 2
 	if len(cmd) <= dirNameIndex {
 		return "please specify folder name"
@@ -18,7 +18,7 @@ func setPathManage(cmd []string) string{
 
 
 // setDataPath sets folder which all database files and logs are stored
-func setDataPath(dirName string) string{
+func setDataPath(dirName string) (msg string){
 
 	// check if directory exists delete everything inside folder
 	if _, err := os.Stat(dirName); err == nil {
@@ -43,7 +43,7 @@ func setDataPath(dirName string) string{
 		return err.Error()
 	}
 
-	_, err = loadcnf.InitLocalDbConfig()
+	_, err = loadcnf.SaveLocalDbConfig()
 	if err != nil{
 		return err.Error()
 	}

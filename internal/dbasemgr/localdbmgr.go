@@ -14,12 +14,8 @@ func LocalDbManage(cmd []string) string {
 	case "set-path":
 		return setPathManage(cmd)
 
-
 	case "new":
-		dBaseNameIndex := 2
-		if len(cmd) <= dBaseNameIndex {
-			return "error: please enter database name for creating new database"
-		}
+		return manageNewDataBase(cmd)
 
 	//case "show":
 	//	showCommand(inputCommands)

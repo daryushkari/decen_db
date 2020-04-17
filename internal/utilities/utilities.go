@@ -5,16 +5,6 @@ import (
 	"os"
 )
 
-// CheckStringInSlice checks if string s is in given array
-func CheckStringInSlice(s string, arr []string) bool {
-	for _, i := range arr {
-		if i == s {
-			return true
-		}
-	}
-	return false
-}
-
 // ReturnFileLines gets fileLocation as argument and returns file line by line as a string slice
 func ReturnFileLines(filePath string) (linesList []string, err error) {
 	file, err := os.Open(filePath)
