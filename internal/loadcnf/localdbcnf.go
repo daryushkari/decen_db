@@ -22,7 +22,7 @@ type DatabaseInfo struct{
 //and local databases and their config file path
 type localDbConfig struct {
 	UseDataBase  string   `json:"UseDataBase"`
-	DataBaseList []string `json:"DataBaseList"`
+	DataBaseList []DatabaseInfo `json:"DataBaseList"`
 	// if directory for storing data has not been defined yet HasCnf is false
 	HasCnf   bool      `json:"-"`
 	LastRead time.Time `json:"-"`
@@ -70,8 +70,16 @@ func SaveLocalDbConfig() (localDbConfig *localDbConfig,err error) {
 
 func setLocalDbConfig(){
 	LocalDbCnf.UseDataBase = ""
-	LocalDbCnf.DataBaseList = []string{""}
+	LocalDbCnf.DataBaseList = []DatabaseInfo{}
 	LocalDbCnf.HasCnf = true
+}
+
+
+func getDataBaseList(dBaseInfo []DatabaseInfo)(dBaseList []string){
+	for _, v := range dBaseInfo{
+		dBaseList = append(dBaseList, v.Name)
+	}
+	return dBaseList
 }
 
 // AddDataBaseToConfig gets database name and adds to config list
@@ -81,11 +89,13 @@ func AddDataBaseToConfig(dBasename string)(err error){
 		return err
 	}
 
-	if utilities.CheckStringInSlice(dBasename, LocalDbCnf.DataBaseList){
+	if utilities.CheckStringInSlice(dBasename, getDataBaseList(LocalDbCnf.DataBaseList)){
 		return errors.New("error: database with name " + dBasename + " exist. please drop it before creating new one.")
 	}
 
-	LocalDbCnf.DataBaseList = append(LocalDbCnf.DataBaseList, dBasename)
+	newDBase := DatabaseInfo{Name:dBasename}
+
+	LocalDbCnf.DataBaseList = append(LocalDbCnf.DataBaseList, newDBase)
 	_, err = SaveLocalDbConfig()
 	return err
 }
@@ -97,11 +107,22 @@ func RemoveDataBaseFromConfig(dBasename string)(err error){
 		return err
 	}
 
-	if !utilities.CheckStringInSlice(dBasename, LocalDbCnf.DataBaseList){
+	if !utilities.CheckStringInSlice(dBasename, getDataBaseList(LocalDbCnf.DataBaseList)){
 		return errors.New("error:" + dBasename + " does not exist")
 	}
 
-	LocalDbCnf.DataBaseList = utilities.RemoveFromSlice(dBasename, LocalDbCnf.DataBaseList)
+	LocalDbCnf.DataBaseList = removeFromDataBaseSlice(dBasename, LocalDbCnf.DataBaseList)
 	_, err = SaveLocalDbConfig()
 	return err
+}
+
+
+func removeFromDataBaseSlice(name string, dataBaseList []DatabaseInfo) []DatabaseInfo {
+	for i, v := range dataBaseList{
+		if v.Name == name{
+			dataBaseList[i] = dataBaseList[len(dataBaseList) - 1]
+			dataBaseList = dataBaseList[:len(dataBaseList) - 1]
+		}
+	}
+	return dataBaseList
 }

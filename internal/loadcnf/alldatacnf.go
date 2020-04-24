@@ -57,8 +57,8 @@ func InitAllDataConfig(allDataDir string) (allDataConfig *allDataConfig, err err
 
 func setAllDataConfig(allDataDir string){
 	AllDataCnf.DataDir = allDataDir
-	AllDataCnf.LedgerDataDir = allDataDir + LedgerDirName
-	AllDataCnf.LocalDataDir = allDataDir + LocalDirName
+	AllDataCnf.LedgerDataDir = allDataDir + LedgerDbDirName
+	AllDataCnf.LocalDataDir = allDataDir + LocalDbDirName
 	AllDataCnf.LedgerDbCnf = allDataDir + LedgerDbCnfPath
 	AllDataCnf.LocalDbCnf = allDataDir + LocalDbCnfPath
 	AllDataCnf.HasCnf = true

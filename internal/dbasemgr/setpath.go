@@ -28,12 +28,12 @@ func setDataPath(dirName string) (msg string){
 		}
 	}
 
-	err := os.MkdirAll(dirName+loadcnf.LedgerDirName, 0700)
+	err := os.MkdirAll(dirName+loadcnf.LedgerDbDirName, 0700)
 	if err != nil{
 		return err.Error()
 	}
 
-	err = os.MkdirAll(dirName+loadcnf.LocalDirName, 0700)
+	err = os.MkdirAll(dirName+loadcnf.LocalDbDirName, 0700)
 	if err != nil{
 		return err.Error()
 	}
