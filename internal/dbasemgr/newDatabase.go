@@ -64,6 +64,6 @@ func makeDataBaseFiles(dBaseDirPath string)(err error){
 func returnNeededFilesForDataBase(dBaseDirPath string)[]string{
 	return []string{dBaseDirPath,
 		dBaseDirPath + loadcnf.DataBaseLogPath,
-		dBaseDirPath + loadcnf.DataBaseLogPath,
-		dBaseDirPath + loadcnf.DataBaseLogPath}
+		dBaseDirPath + loadcnf.DataBaseConfigPath,
+		dBaseDirPath + loadcnf.DataBaseCollectionPath}
 }
