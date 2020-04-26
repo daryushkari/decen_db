@@ -52,6 +52,7 @@ func LoadLocalDbConfig() (locCnf *localDbConfig, err error){
 func SaveLocalDbConfig() (localDbConfig *localDbConfig,err error) {
 	LocalDbCnfMu.Lock()
 	defer LocalDbCnfMu.Unlock()
+	setLocalDbConfig()
 
 	dataCnf, err := LoadAllDataConfig()
 	if err != nil{
@@ -69,6 +70,9 @@ func SaveLocalDbConfig() (localDbConfig *localDbConfig,err error) {
 
 
 func setLocalDbConfig(){
+	if LocalDbCnf.HasCnf{
+		return
+	}
 	LocalDbCnf.UseDataBase = ""
 	LocalDbCnf.DataBaseList = []DatabaseInfo{}
 	LocalDbCnf.HasCnf = true
