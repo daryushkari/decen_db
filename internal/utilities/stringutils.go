@@ -23,7 +23,8 @@ func RemoveFromSlice(value string, slice []string) []string {
 }
 
 func JoinDirPath(pathList []string)(joinedPath string){
-	for _,v := range pathList{
+	joinedPath = pathList[0]
+	for _,v := range pathList[1:]{
 		joinedPath += "/" + v
 	}
 	return joinedPath

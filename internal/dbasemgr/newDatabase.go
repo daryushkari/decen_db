@@ -24,7 +24,7 @@ func manageNewDataBase(cmd []string)(msg string){
 		return err.Error()
 	}
 
-	err = makeNewDataBase(cmd[dBaseNameIndex], allDataCnf.LocalDataDir)
+	err = makeNewDataBase(allDataCnf.LocalDataDir, cmd[dBaseNameIndex])
 	if err != nil{
 		_ = loadcnf.RemoveDataBaseFromConfig(cmd[dBaseNameIndex])
 		return err.Error()
@@ -33,7 +33,7 @@ func manageNewDataBase(cmd []string)(msg string){
 	return cmd[dBaseNameIndex] + "created successfully"
 }
 
-func makeNewDataBase(dBasename string, filePath string)(err error){
+func makeNewDataBase(filePath string, dBasename string)(err error){
 
 	dBaseDirPath := utilities.JoinDirPath([]string{filePath, dBasename})
 

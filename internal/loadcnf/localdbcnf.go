@@ -52,12 +52,12 @@ func LoadLocalDbConfig() (locCnf *localDbConfig, err error){
 func SaveLocalDbConfig() (localDbConfig *localDbConfig,err error) {
 	LocalDbCnfMu.Lock()
 	defer LocalDbCnfMu.Unlock()
-	setLocalDbConfig()
 
 	dataCnf, err := LoadAllDataConfig()
 	if err != nil{
 		return nil,err
 	}
+
 	err = filemgr.WriteAsJson(LocalDbCnf, dataCnf.LocalDbCnf)
 	if err != nil{
 		return nil, err
@@ -94,9 +94,11 @@ func AddDataBaseToConfig(dBasename string)(err error){
 	}
 
 	newDBase := DatabaseInfo{Name:dBasename}
+	dataBaseListPtr := &LocalDbCnf.DataBaseList
 
-	LocalDbCnf.DataBaseList = append(LocalDbCnf.DataBaseList, newDBase)
+	*dataBaseListPtr = append(LocalDbCnf.DataBaseList, newDBase)
 	_, err = SaveLocalDbConfig()
+
 	return err
 }
 

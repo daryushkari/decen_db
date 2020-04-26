@@ -16,7 +16,7 @@ const LocalDbCnfPath string = "/local_database/local_database.cnf"
 //DbLogPath is relative path of all log files of each database
 const DataBaseLogPath string = "/logs/main_logs.log"
 //DataBaseConfigPath is relative path of each database config file
-const DataBaseConfigPath string = "cnf/database.cnf"
+const DataBaseConfigPath string = "/cnf/database.cnf"
 //DataBaseCollectionPath is relative path of collections folder
 const DataBaseCollectionPath string = "/col"
 
