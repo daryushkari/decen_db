@@ -14,13 +14,13 @@ const LedgerDbCnfPath string = "/ledger_database/ledger_database.cnf"
 const LocalDbCnfPath string = "/local_database/local_database.cnf"
 
 //DbLogPath is relative path of all log files of each database
-const DataBaseLogPath string = "/logs/main_logs.log"
+const DataBaseLogPath string = "/logs"
 //DataBaseConfigPath is relative path of each database config file
-const DataBaseConfigPath string = "/cnf/database.cnf"
+const DataBaseConfigPath string = "/database.cnf"
 //DataBaseCollectionPath is relative path of collections folder
 const DataBaseCollectionPath string = "/col"
 
 
-const CollectionLogPath string = "/logs/main_logs.log"
+const CollectionLogPath string = "/logs"
 
-const CollectionConfigPath string = "/cnf/collection.cnf"
+const CollectionConfigPath string = "/cnf"

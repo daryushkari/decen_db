@@ -8,21 +8,17 @@ import (
 	"time"
 )
 
-type CollectionInfo struct{
-	Name string
-}
-
-type DatabaseInfo struct{
-	Collections []CollectionInfo `json:"Collections"`
-	Name string                  `json:"Name"`
+type DatabaseBasicInfo struct{
+	Name string          	`json:"Name"`
+	ConfigFilePath string 	`json:"ConfigFilePath"`
 }
 
 //allDataConfig includes database_init.cnf file and config information in it
 //including directory path which all databases are and directory of ledger databases
 //and local databases and their config file path
 type localDbConfig struct {
-	UseDataBase  string   `json:"UseDataBase"`
-	DataBaseList []DatabaseInfo `json:"DataBaseList"`
+	UseDataBase  string              `json:"UseDataBase"`
+	DataBaseList []DatabaseBasicInfo `json:"DataBaseList"`
 	// if directory for storing data has not been defined yet HasCnf is false
 	HasCnf   bool      `json:"-"`
 	LastRead time.Time `json:"-"`
@@ -74,33 +70,59 @@ func setLocalDbConfig(){
 		return
 	}
 	LocalDbCnf.UseDataBase = ""
-	LocalDbCnf.DataBaseList = []DatabaseInfo{}
+	LocalDbCnf.DataBaseList = []DatabaseBasicInfo{}
 	LocalDbCnf.HasCnf = true
 }
 
 
-func getDataBaseList(dBaseInfo []DatabaseInfo)(dBaseList []string){
+func getDataBaseList(dBaseInfo []DatabaseBasicInfo)(dBaseList []string){
 	for _, v := range dBaseInfo{
 		dBaseList = append(dBaseList, v.Name)
 	}
 	return dBaseList
 }
 
+
+func CheckDataBaseExist(dBasename string)(doesExist bool,err error){
+	LocalDbCnf, err := LoadLocalDbConfig()
+	if err != nil{
+		return false, err
+	}
+
+	if utilities.CheckStringInSlice(dBasename, getDataBaseList(LocalDbCnf.DataBaseList)){
+		return true, nil
+	}
+	return false, nil
+}
+
+
+func CreateNewDataBaseInfo(dBasename string, localDbDirPath string)(newDBaseInfo *DatabaseBasicInfo){
+	newDBaseInfo = &DatabaseBasicInfo{
+		Name: dBasename,
+		ConfigFilePath:utilities.JoinDirPath([]string{localDbDirPath,dBasename,DataBaseConfigPath}),
+	}
+	return newDBaseInfo
+}
+
 // AddDataBaseToConfig gets database name and adds to config list
-func AddDataBaseToConfig(dBasename string)(err error){
+func AddDataBaseToConfig(newDBaseInfo *DatabaseBasicInfo)(err error){
 	LocalDbCnf, err := LoadLocalDbConfig()
 	if err != nil{
 		return err
 	}
 
-	if utilities.CheckStringInSlice(dBasename, getDataBaseList(LocalDbCnf.DataBaseList)){
-		return errors.New("error: database with name " + dBasename + " exist. please drop it before creating new one.")
+	// Todo: take string to somewhere else
+	doesExist, err := CheckDataBaseExist(newDBaseInfo.Name)
+	if err != nil{
+		return err
+	}
+	if doesExist{
+		return errors.New("error: database with name " + newDBaseInfo.Name + " exist. please drop it before creating new one.")
 	}
 
-	newDBase := DatabaseInfo{Name:dBasename}
 	dataBaseListPtr := &LocalDbCnf.DataBaseList
 
-	*dataBaseListPtr = append(LocalDbCnf.DataBaseList, newDBase)
+	*dataBaseListPtr = append(LocalDbCnf.DataBaseList, *newDBaseInfo)
 	_, err = SaveLocalDbConfig()
 
 	return err
@@ -123,7 +145,7 @@ func RemoveDataBaseFromConfig(dBasename string)(err error){
 }
 
 
-func removeFromDataBaseSlice(name string, dataBaseList []DatabaseInfo) []DatabaseInfo {
+func removeFromDataBaseSlice(name string, dataBaseList []DatabaseBasicInfo) []DatabaseBasicInfo {
 	for i, v := range dataBaseList{
 		if v.Name == name{
 			dataBaseList[i] = dataBaseList[len(dataBaseList) - 1]
@@ -131,4 +153,18 @@ func removeFromDataBaseSlice(name string, dataBaseList []DatabaseInfo) []Databas
 		}
 	}
 	return dataBaseList
+}
+
+func ReturnDataBaseBasicInfoByName(dBaseName string)(newDBaseInfo *DatabaseBasicInfo, err error){
+	LocalDbCnf, err := LoadLocalDbConfig()
+	if err != nil{
+		return nil, err
+	}
+
+	for _,v := range LocalDbCnf.DataBaseList{
+		if v.Name == dBaseName{
+			return &v, nil
+		}
+	}
+	return nil,  errors.New("error:" + dBaseName + " does not exist")
 }

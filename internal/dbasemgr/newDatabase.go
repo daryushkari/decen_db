@@ -1,6 +1,7 @@
 package dbasemgr
 
 import (
+	"decen_db/internal/filemgr"
 	"decen_db/internal/loadcnf"
 	"decen_db/internal/utilities"
 	"os"
@@ -19,12 +20,13 @@ func manageNewDataBase(cmd []string)(msg string){
 		return err.Error()
 	}
 
-	err = loadcnf.AddDataBaseToConfig(cmd[dBaseNameIndex])
+	err = loadcnf.AddDataBaseToConfig(loadcnf.CreateNewDataBaseInfo(allDataCnf.LocalDataDir,cmd[dBaseNameIndex]))
 	if err != nil{
 		return err.Error()
 	}
 
 	err = makeNewDataBase(allDataCnf.LocalDataDir, cmd[dBaseNameIndex])
+
 	if err != nil{
 		_ = loadcnf.RemoveDataBaseFromConfig(cmd[dBaseNameIndex])
 		return err.Error()
@@ -33,20 +35,35 @@ func manageNewDataBase(cmd []string)(msg string){
 	return cmd[dBaseNameIndex] + "created successfully"
 }
 
-func makeNewDataBase(filePath string, dBasename string)(err error){
-
-	dBaseDirPath := utilities.JoinDirPath([]string{filePath, dBasename})
-
-	err = makeDataBaseFiles(dBaseDirPath)
+func createDataBaseConfigFile(dBaseName string)(err error){
+	DbaseInfo, err := loadcnf.ReturnDataBaseBasicInfoByName(dBaseName)
 	if err != nil{
 		return err
 	}
 
+	dBaseCnf, err := loadcnf.MakeNewDataBaseConfig(dBaseName)
+	if err != nil{
+		return err
+	}
+
+	err = filemgr.WriteAsJson(dBaseCnf, DbaseInfo.ConfigFilePath)
 	return err
 }
 
+func makeNewDataBase(filePath string, dBaseName string)(err error){
 
-func makeDataBaseFiles(dBaseDirPath string)(err error){
+	dBaseDirPath := utilities.JoinDirPath([]string{filePath, dBaseName})
+
+	err = makeDataBaseDirs(dBaseDirPath)
+	if err != nil{
+		return err
+	}
+
+	err = createDataBaseConfigFile(dBaseName)
+	return err
+}
+
+func makeDataBaseDirs(dBaseDirPath string)(err error){
 
 	fileNamesList := returnNeededFilesForDataBase(dBaseDirPath)
 
@@ -64,6 +81,6 @@ func makeDataBaseFiles(dBaseDirPath string)(err error){
 func returnNeededFilesForDataBase(dBaseDirPath string)[]string{
 	return []string{dBaseDirPath,
 		dBaseDirPath + loadcnf.DataBaseLogPath,
-		dBaseDirPath + loadcnf.DataBaseConfigPath,
 		dBaseDirPath + loadcnf.DataBaseCollectionPath}
 }
+
