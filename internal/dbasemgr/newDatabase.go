@@ -20,7 +20,7 @@ func manageNewDataBase(cmd []string)(msg string){
 		return err.Error()
 	}
 
-	err = loadcnf.AddDataBaseToConfig(loadcnf.CreateNewDataBaseInfo(allDataCnf.LocalDataDir,cmd[dBaseNameIndex]))
+	err = loadcnf.AddDataBaseToConfig(loadcnf.CreateNewDataBaseInfo(cmd[dBaseNameIndex],allDataCnf.LocalDataDir))
 	if err != nil{
 		return err.Error()
 	}
@@ -36,7 +36,7 @@ func manageNewDataBase(cmd []string)(msg string){
 }
 
 func createDataBaseConfigFile(dBaseName string)(err error){
-	DbaseInfo, err := loadcnf.ReturnDataBaseBasicInfoByName(dBaseName)
+	dBaseInfo, err := loadcnf.ReturnDataBaseBasicInfoByName(dBaseName)
 	if err != nil{
 		return err
 	}
@@ -46,7 +46,7 @@ func createDataBaseConfigFile(dBaseName string)(err error){
 		return err
 	}
 
-	err = filemgr.WriteAsJson(dBaseCnf, DbaseInfo.ConfigFilePath)
+	err = filemgr.WriteAsJson(dBaseCnf, dBaseInfo.ConfigFilePath)
 	return err
 }
 
