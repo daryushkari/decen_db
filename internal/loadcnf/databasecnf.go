@@ -2,7 +2,6 @@ package loadcnf
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 )
 
@@ -19,16 +18,8 @@ type DataBaseConfig struct{
 // Todo: should be thread safe
 
 func MakeNewDataBaseConfig(dBaseName string) (dBaseCnf *DataBaseConfig, err error) {
-	doesExist, err := CheckDataBaseExist(dBaseName)
-	if err != nil {
-		return nil, err
-	}
 
-	if doesExist{
-		return nil, errors.New("database already does exist")
-	}
-
-	dBaseCnf = &DataBaseConfig{Name:dBaseName}
+	dBaseCnf = &DataBaseConfig{Name:dBaseName, Collections:[]CollectionBasicInfo{}}
 
 	return dBaseCnf, nil
 

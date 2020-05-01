@@ -17,8 +17,8 @@ func LocalDbManage(cmd []string) string {
 	case "new":
 		return manageNewDataBase(cmd)
 
-	//case "show":
-	//	showCommand(inputCommands)
+	case "show":
+		showCommand(inputCommands)
 
 	//case "drop":
 	//	filemgr.DropDatabase()
@@ -29,8 +29,3 @@ func LocalDbManage(cmd []string) string {
 	return "invalid input please enter help localdb for more information"
 }
 
-//func showCommand(inputCommands []string){
-//	if len(inputCommands) < 4{
-//		filemgr.ShowDatabase()
-//	}
-//}

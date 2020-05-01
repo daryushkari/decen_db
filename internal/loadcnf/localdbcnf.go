@@ -88,7 +88,6 @@ func CheckDataBaseExist(dBasename string)(doesExist bool,err error){
 	if err != nil{
 		return false, err
 	}
-
 	if utilities.CheckStringInSlice(dBasename, getDataBaseList(LocalDbCnf.DataBaseList)){
 		return true, nil
 	}
@@ -121,6 +120,7 @@ func AddDataBaseToConfig(newDBaseInfo *DatabaseBasicInfo)(err error){
 	}
 
 	dataBaseListPtr := &LocalDbCnf.DataBaseList
+
 
 	*dataBaseListPtr = append(LocalDbCnf.DataBaseList, *newDBaseInfo)
 	_, err = SaveLocalDbConfig()
