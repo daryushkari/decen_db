@@ -29,3 +29,10 @@ func JoinDirPath(pathList []string)(joinedPath string){
 	}
 	return joinedPath
 }
+
+func ConvertSliceToLines(slice []string)(lines string){
+	for _, v := range slice{
+		lines += v + "\n"
+	}
+	return lines
+}

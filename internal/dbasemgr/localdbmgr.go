@@ -18,7 +18,7 @@ func LocalDbManage(cmd []string) string {
 		return manageNewDataBase(cmd)
 
 	case "show":
-		showCommand(inputCommands)
+		return showDataBases()
 
 	//case "drop":
 	//	filemgr.DropDatabase()

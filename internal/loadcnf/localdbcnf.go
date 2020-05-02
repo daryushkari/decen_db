@@ -75,7 +75,7 @@ func setLocalDbConfig(){
 }
 
 
-func getDataBaseList(dBaseInfo []DatabaseBasicInfo)(dBaseList []string){
+func GetNamesFromDataBaseList(dBaseInfo []DatabaseBasicInfo)(dBaseList []string){
 	for _, v := range dBaseInfo{
 		dBaseList = append(dBaseList, v.Name)
 	}
@@ -88,7 +88,7 @@ func CheckDataBaseExist(dBasename string)(doesExist bool,err error){
 	if err != nil{
 		return false, err
 	}
-	if utilities.CheckStringInSlice(dBasename, getDataBaseList(LocalDbCnf.DataBaseList)){
+	if utilities.CheckStringInSlice(dBasename, GetNamesFromDataBaseList(LocalDbCnf.DataBaseList)){
 		return true, nil
 	}
 	return false, nil
@@ -110,7 +110,6 @@ func AddDataBaseToConfig(newDBaseInfo *DatabaseBasicInfo)(err error){
 		return err
 	}
 
-	// Todo: take string to somewhere else
 	doesExist, err := CheckDataBaseExist(newDBaseInfo.Name)
 	if err != nil{
 		return err
@@ -135,7 +134,7 @@ func RemoveDataBaseFromConfig(dBasename string)(err error){
 		return err
 	}
 
-	if !utilities.CheckStringInSlice(dBasename, getDataBaseList(LocalDbCnf.DataBaseList)){
+	if !utilities.CheckStringInSlice(dBasename, GetNamesFromDataBaseList(LocalDbCnf.DataBaseList)){
 		return errors.New("error:" + dBasename + " does not exist")
 	}
 
