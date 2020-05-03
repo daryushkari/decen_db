@@ -20,9 +20,8 @@ func LocalDbManage(cmd []string) string {
 	case "show":
 		return showDataBases()
 
-	//case "drop":
-	//	filemgr.DropDatabase()
-
+	case "drop":
+		return dropDataBase(cmd)
 
 
 	}
