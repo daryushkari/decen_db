@@ -11,6 +11,7 @@ import (
 type DatabaseBasicInfo struct{
 	Name string          	`json:"Name"`
 	ConfigFilePath string 	`json:"ConfigFilePath"`
+	DataBaseDirPath string  `json:"DirPath"`
 }
 
 //allDataConfig includes database_init.cnf file and config information in it
@@ -99,6 +100,7 @@ func CreateNewDataBaseInfo(dBasename string, localDbDirPath string)(newDBaseInfo
 	newDBaseInfo = &DatabaseBasicInfo{
 		Name: dBasename,
 		ConfigFilePath:utilities.JoinDirPath([]string{localDbDirPath,dBasename,DataBaseConfigPath}),
+		DataBaseDirPath:utilities.JoinDirPath([]string{localDbDirPath,dBasename}),
 	}
 	return newDBaseInfo
 }
@@ -127,7 +129,6 @@ func AddDataBaseToConfig(newDBaseInfo *DatabaseBasicInfo)(err error){
 	return err
 }
 
-// AddDataBaseToConfig gets database name and adds to config list
 func RemoveDataBaseFromConfig(dBasename string)(err error){
 	LocalDbCnf, err := LoadLocalDbConfig()
 	if err != nil{
