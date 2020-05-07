@@ -24,3 +24,5 @@ const DataBaseCollectionPath string = "/col"
 const CollectionLogPath string = "/logs"
 
 const CollectionConfigPath string = "/cnf"
+
+const CollectionMainDataPath string = "/Data/data.col"
