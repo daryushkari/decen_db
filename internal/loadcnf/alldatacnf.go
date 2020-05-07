@@ -12,14 +12,14 @@ import (
 //including directory path which all databases are and directory of ledger databases
 //and local databases and their config file path
 type allDataConfig struct {
-	DataDir       string `json:"DataDir"`
+	DataDir string 		 `json:"DataDir"`
 	LedgerDataDir string `json:"LedgerDataDir"`
-	LocalDataDir  string `json:"LocalDataDir"`
-	LedgerDbCnf   string `json:"LedgerDatabaseConfig"`
-	LocalDbCnf    string `json:"LocalDatabaseConfig"`
+	LocalDataDir string  `json:"LocalDataDir"`
+	LedgerDbCnf string   `json:"LedgerDatabaseConfig"`
+	LocalDbCnf string    `json:"LocalDatabaseConfig"`
 	// if directory for storing data has not been defined yet HasCnf is false
-	HasCnf   bool      `json:"-"`
-	LastRead time.Time `json:"-"`
+	HasCnf bool          `json:"-"`
+	LastRead time.Time   `json:"-"`
 }
 
 func (localCnf *allDataConfig) updateLastRead(){
