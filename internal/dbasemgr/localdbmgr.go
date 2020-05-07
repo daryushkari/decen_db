@@ -1,5 +1,9 @@
 package dbasemgr
 
+import (
+	"decen_db/internal/collectionmgr"
+)
+
 // LocalDbManage manages all commands starting with localdb and calls function related to sub command
 func LocalDbManage(cmd []string) string {
 
@@ -23,6 +27,8 @@ func LocalDbManage(cmd []string) string {
 	case "drop":
 		return dropDataBase(cmd)
 
+	case "col":
+		return collectionmgr.CollectionManager(cmd)
 
 	}
 	return "invalid input please enter help localdb for more information"

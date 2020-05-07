@@ -1,0 +1,8 @@
+localdb col database_name new_col "collection_name"
+    creates new collection
+
+localdb col database_name show_col
+    show list of collections
+
+localdb col database_name drop_col "collection_name"
+    delete collection

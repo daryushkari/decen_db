@@ -17,3 +17,6 @@ localdb drop "database name"
 
 localdb show
     show list of databases
+
+localdb query ...
+    runs query
