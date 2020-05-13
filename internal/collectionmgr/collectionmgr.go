@@ -6,7 +6,7 @@ func CollectionManager(cmd []string)(msg string){
 
 	switch cmd[colSubCmdIndex] {
 	case "new_col":
-		return MakeNewCollection(cmd)
+		return ManageNewCollection(cmd)
 
 	default:
 		return ""

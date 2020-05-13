@@ -112,6 +112,7 @@ func AddDataBaseToConfig(newDBaseInfo *DataBaseBasicInfo)(err error){
 		return err
 	}
 
+	// Todo: should not check if database Exist
 	doesExist, err := CheckDataBaseExist(newDBaseInfo.Name)
 	if err != nil{
 		return err
@@ -135,6 +136,7 @@ func RemoveDataBaseFromConfig(dBasename string)(err error){
 		return err
 	}
 
+	// Todo: should not check if database doesn't exist
 	if !utilities.CheckStringInSlice(dBasename, GetNamesFromDataBaseList(LocalDbCnf.DataBaseList)){
 		return errors.New("error:" + dBasename + " does not exist")
 	}

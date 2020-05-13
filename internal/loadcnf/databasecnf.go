@@ -12,6 +12,7 @@ type CollectionBasicInfo struct{
 
 type DataBaseConfig struct{
 	Name string 						`json:"Name"`
+	MainDirPath string					`json:"MainDirPath"`
 	Collections []CollectionBasicInfo 	`json:"Collections"`
 }
 
@@ -40,3 +41,25 @@ func LoadDataBaseConfig(dBaseConfigPath string) (dBaseCnf *DataBaseConfig, err e
 	return dBaseCnf, err
 }
 
+
+func CheckCollectionExist(dBaseCnf *DataBaseConfig, colName string)(colExist bool){
+	for _, v := range dBaseCnf.Collections{
+		if v.Name == colName{
+			return true
+		}
+	}
+	return false
+}
+
+func ReturnNewCollectionBasicInfo(colName string, colCnfPath string) *CollectionBasicInfo{
+	return &CollectionBasicInfo{Name: colName, ConfigFilePath: colCnfPath}
+}
+
+func AddCollectionBasicInfoToConfig(dBaseCnf *DataBaseConfig, colInfo *CollectionBasicInfo){
+	colBasicInfoList := &dBaseCnf.Collections
+	*colBasicInfoList = append(dBaseCnf.Collections, *colInfo)
+}
+
+func RemoveCollectionFromConfig(dBaseCnf *DataBaseConfig, colInfo *CollectionBasicInfo){
+
+}
