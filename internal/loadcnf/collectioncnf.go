@@ -1,6 +1,7 @@
 package loadcnf
 
 import (
+	"decen_db/internal/filemgr"
 	"encoding/json"
 	"io/ioutil"
 )
@@ -40,3 +41,7 @@ func LoadCollectionConfig(colConfigPath string) (colCnf *CollectionConfig, err e
 	return colCnf, err
 }
 
+func UpdateCollectionByConfigPath(cnfPath string, colCnf *CollectionConfig)(err error){
+	err = filemgr.WriteAsJson(LocalDbCnf, dataCnf.LocalDbCnf)
+	return err
+}
