@@ -41,7 +41,7 @@ func createDataBaseConfigFile(dBaseName string)(err error){
 		return err
 	}
 
-	dBaseCnf, err := loadcnf.MakeNewDataBaseConfig(dBaseName)
+	dBaseCnf, err := loadcnf.MakeNewDataBaseConfig(dBaseInfo)
 	if err != nil{
 		return err
 	}

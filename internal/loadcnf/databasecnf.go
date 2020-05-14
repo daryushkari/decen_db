@@ -18,9 +18,13 @@ type DataBaseConfig struct{
 
 // Todo: should be thread safe
 
-func MakeNewDataBaseConfig(dBaseName string) (dBaseCnf *DataBaseConfig, err error) {
+func MakeNewDataBaseConfig(dBaseInfo *DataBaseBasicInfo) (dBaseCnf *DataBaseConfig, err error) {
 
-	dBaseCnf = &DataBaseConfig{Name:dBaseName, Collections:[]CollectionBasicInfo{}}
+	dBaseCnf = &DataBaseConfig{
+		Name:dBaseInfo.Name,
+		MainDirPath:dBaseInfo.DataBaseDirPath,
+		Collections:[]CollectionBasicInfo{},
+	}
 
 	return dBaseCnf, nil
 
