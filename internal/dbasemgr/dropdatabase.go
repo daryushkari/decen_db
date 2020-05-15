@@ -2,7 +2,6 @@ package dbasemgr
 
 import (
 	"decen_db/internal/loadcnf"
-	"fmt"
 	"os"
 )
 
@@ -18,7 +17,7 @@ func dropDataBase(cmd []string)(msg string){
 	if err != nil{
 		return err.Error()
 	}
-	fmt.Println(dBaseBasicInfo.DataBaseDirPath)
+
 	err = os.RemoveAll(dBaseBasicInfo.DataBaseDirPath)
 	if err != nil{
 		loadcnf.AddDataBaseToConfig(dBaseBasicInfo)

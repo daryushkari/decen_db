@@ -60,6 +60,8 @@ func makeNewDataBase(filePath string, dBaseName string)(err error){
 	return err
 }
 
+// Todo: duplication should be fixed
+
 func makeDataBaseDirs(dBaseDirPath string)(err error){
 
 	fileNamesList := returnNeededFilesForDataBase(dBaseDirPath)

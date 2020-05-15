@@ -35,6 +35,7 @@ func MakeNewDataBaseConfig(dBaseInfo *DataBaseBasicInfo) (dBaseCnf *DataBaseConf
 // Todo: should be thread safe
 
 func LoadDataBaseConfig(dBaseConfigPath string) (dBaseCnf *DataBaseConfig, err error){
+	dBaseCnf = &DataBaseConfig{}
 	file, err := ioutil.ReadFile(dBaseConfigPath)
 	if err != nil{
 		return nil, err
@@ -53,7 +54,6 @@ func LoadDataBaseConfigByName(dBaseName string)(dBaseCnf *DataBaseConfig, err er
 	if err != nil{
 		return nil, err
 	}
-
 	dBaseCnf, err = LoadDataBaseConfig(dBaseInfo.ConfigFilePath)
 	return dBaseCnf, err
 

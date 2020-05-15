@@ -2,6 +2,7 @@ package loadcnf
 
 import (
 	"decen_db/internal/filemgr"
+	"decen_db/internal/utilities"
 	"encoding/json"
 	"io/ioutil"
 )
@@ -14,12 +15,12 @@ type CollectionConfig struct{
 
 // Todo: should be thread safe
 
-func MakeCollectionConfig(colName string, colMainDir string) (colCnf *CollectionConfig) {
+func MakeCollectionConfig(colName string, colParentDir string) (colCnf *CollectionConfig) {
 
 	colCnf = &CollectionConfig{
 		Name : colName,
-		MainDir : colMainDir,
-		CollectionDataPath : colMainDir + CollectionMainDataPath,
+		MainDir : utilities.JoinDirPath([]string{colParentDir, colName}),
+		CollectionDataPath : utilities.JoinDirPath([]string{colParentDir,colName , CollectionMainDataPath}),
 	}
 
 	return colCnf
@@ -29,6 +30,7 @@ func MakeCollectionConfig(colName string, colMainDir string) (colCnf *Collection
 // Todo: should be thread safe
 
 func LoadCollectionConfig(colConfigPath string) (colCnf *CollectionConfig, err error){
+	colCnf = &CollectionConfig{}
 	file, err := ioutil.ReadFile(colConfigPath)
 	if err != nil{
 		return nil, err
@@ -42,6 +44,6 @@ func LoadCollectionConfig(colConfigPath string) (colCnf *CollectionConfig, err e
 }
 
 func UpdateCollectionByConfigPath(cnfPath string, colCnf *CollectionConfig)(err error){
-	err = filemgr.WriteAsJson(LocalDbCnf, dataCnf.LocalDbCnf)
+	err = filemgr.WriteAsJson(colCnf, cnfPath)
 	return err
 }
