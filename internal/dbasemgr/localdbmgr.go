@@ -2,6 +2,7 @@ package dbasemgr
 
 import (
 	"decen_db/internal/collectionmgr"
+	"decen_db/internal/querymgr"
 )
 
 // LocalDbManage manages all commands starting with localdb and calls function related to sub command
@@ -30,7 +31,8 @@ func LocalDbManage(cmd []string) string {
 	case "col":
 		return collectionmgr.CollectionManager(cmd)
 
+	case "query":
+		return querymgr.QueryManager(cmd)
 	}
 	return "invalid input please enter help localdb for more information"
 }
-

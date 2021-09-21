@@ -1,12 +1,12 @@
-_ query database_name insert "collection_name" {...}
+localdb query database_name insert collection_name {...}
     insert document with values in {...} into collection
 
-_ query database_name select "collection_name" where {condition}
+localdb query database_name find collection_name where {condition}
     show documents which satisfy condition
 
-_ query database_name update "collection_name" where {condition} with {new values}
+localdb query database_name update collection_name where {condition} with {new values}
     update all documents with new values
 
-_ query database_name delete "collection_name" where {condition}
+localdb query database_name delete collection_name where {condition}
     delete documents with condition
 
