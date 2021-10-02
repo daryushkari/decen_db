@@ -9,4 +9,3 @@ localdb query database_name update collection_name where {condition} with {new v
 
 localdb query database_name delete collection_name where {condition}
     delete documents with condition
-

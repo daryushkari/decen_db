@@ -1,9 +1,11 @@
 package server
 
 import (
-	"decen_db/internal/cmdmgr"
+	"bufio"
+	"decen_db/internal/parser"
 	"fmt"
 	"net"
+	"os"
 	"strings"
 	"time"
 )
@@ -39,7 +41,8 @@ func handleRequest(conn net.Conn) {
 
 	// input command list for database
 	cmd := strings.Split(string(buf)[:req], " ")
-	response := cmdmgr.CommandManager(cmd)
+	//Todo: fix input later
+	response := parser.CommandManager(cmd[0])
 
 	_, err = conn.Write([]byte(response))
 	if err != nil {
@@ -47,4 +50,23 @@ func handleRequest(conn net.Conn) {
 		return
 	}
 
+}
+
+func EnterCmd() {
+	for {
+		fmt.Println("please enter command:")
+		// Todo:
+		in := bufio.NewReader(os.Stdin)
+		cmd, err := in.ReadString('\n')
+		cmd = cmd[:len(cmd)-1]
+		if err != nil {
+			panic(err)
+		}
+		if cmd == "exit" {
+			return
+		}
+
+		response := parser.CommandManager(cmd)
+		fmt.Println(response)
+	}
 }

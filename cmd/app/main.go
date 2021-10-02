@@ -4,7 +4,6 @@ import (
 	"decen_db/internal/server"
 )
 
-
-func main(){
-	server.ListenServer()
+func main() {
+	server.EnterCmd()
 }

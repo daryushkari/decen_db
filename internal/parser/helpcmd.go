@@ -1,4 +1,4 @@
-package cmdmgr
+package parser
 
 import (
 	"decen_db/internal/utilities"
